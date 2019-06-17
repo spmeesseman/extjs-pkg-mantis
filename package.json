@@ -45,7 +45,7 @@
         "summary": "Package wrapper singleton for mantis",
         "detailedDescription": "Package wrapper singleton for mantis RPC",
         "version": "1.0.0.0",
-        "compatVersion": "1.0.0",
+        "compatversion": "1.0.0",
         "format": "1",
         "slicer": null,
         "output": "${framework.dir}/build/packages/${package.name}",
