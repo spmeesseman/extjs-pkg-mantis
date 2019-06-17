@@ -55,7 +55,7 @@ Ext.define('Ext.ux.mantis.Ticket',
             panel.body.on('click', function() 
             { 
                 var ticketsTabPanel = panel.up('tickets');
-                var tab = ticketsTabPanel.add(Ext.create('GEMS.view.miscellaneous.help.TicketDetail',
+                var tab = ticketsTabPanel.add(Ext.create('Ext.ux.mantis.TicketDetail',
                 {
                     viewModel: panel.getViewModel(),
                     closable: true,

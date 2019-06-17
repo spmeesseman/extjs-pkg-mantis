@@ -18,7 +18,7 @@
     "historyHdrFile":    "install\\history-hdr.txt",
     "historyLineLen":    80,
     "homePage":          "",
-    "interactive":       "N",
+    "interactive":       "Y",
     "npmPackDist":       "Y",
     "npmRelease":        "Y",
     "nugetRelease":      "Y",
@@ -41,9 +41,9 @@
     "xRuns": [
     {
         "repoType":      "svn",
-        "repo":          "https://svn.development.pjats.com/repos/pja/app-publisher/trunk",
-        "homePage":      "https://projects.development.pjats.com/app-publisher",
-        "bugs":          "https://projects.development.pjats.com/app-publisher/ticket/1",
+        "repo":          "https://svn.development.pjats.com/pja/extjs-pkg-mantis/trunk",
+        "homePage":      "https://npm.development.pjats.com",
+        "bugs":          "https://projects.development.pjats.com/-/web/detail/@perryjohnson/extjs-pkg-mantis",
         "npmRegistry":   "https://npm.development.pjats.com",
         "textEditor":    "",
         "npmScope":      "@perryjohnson",
