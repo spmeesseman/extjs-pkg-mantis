@@ -1,4 +1,4 @@
-Ext.define('Ext.us.mantis.model.Category', 
+Ext.define('Ext.ux.mantis.model.Category', 
 {
     extend: 'Ext.data.Model',    
     alias: 'mantis.model.category',

@@ -1,4 +1,4 @@
-Ext.define('Ext.us.mantis.model.Version', 
+Ext.define('Ext.ux.mantis.model.Version', 
 {
     extend: 'Ext.data.Model',    
     alias: 'mantis.model.version',

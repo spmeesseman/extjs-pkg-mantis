@@ -1,5 +1,5 @@
 
-Ext.define('Ext.us.mantis.model.Note', 
+Ext.define('Ext.ux.mantis.model.Note', 
 {
     extend: 'Ext.data.Model',    
     alias: 'mantis.model.note',

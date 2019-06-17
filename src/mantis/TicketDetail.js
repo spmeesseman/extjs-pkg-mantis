@@ -51,7 +51,8 @@ Ext.define('Ext.ux.mantis.TicketDetail',
             {
                 bind: 
                 {
-                    html: '{record.type}',
+                    html: '{record.custom_fields&&record.custom_fields.0.value?record.custom_fields.0.value:\'unknown\'}',
+                    //html: '{record.severity.name==\'feature\'?record.severity.name:\'bug\'}',
                     bodyStyle: 
                     {
                         'color': 'white',
@@ -69,11 +70,11 @@ Ext.define('Ext.ux.mantis.TicketDetail',
             {
                 bind: 
                 {
-                    html: '{record.status}',
+                    html: '{record.status.name}',
                     bodyStyle: 
                     {
-                        'color': 'white',
-                        'background': '{statusColor}',
+                        'color': '#222222',
+                        'background': '{record.status.color}',
                         'text-align':'right',
                         'border-radius': '5px'
                     }

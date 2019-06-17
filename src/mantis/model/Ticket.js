@@ -1,16 +1,27 @@
 
-Ext.define('Ext.us.mantis.model.Ticket', 
+Ext.define('Ext.ux.mantis.model.Ticket', 
 {
     extend: 'Ext.data.Model',    
     alias: 'mantis.model.ticket',
     
     requires: [
-        'Ext.us.mantis.model.Category'
+        'Ext.ux.mantis.model.Category'
     ],
 
     proxy: {
         type: 'rest',
-        url: 'https://app1.development.pjats.com/projects/api/rest/issues'
+        url: 'https://app1.development.pjats.com/projects/api/rest/issues',
+        withCredentials: true,
+        useDefaultXhrHeader: false,
+        headers:
+        {
+            Authorization: Ext.manifest.mantis.token
+        },
+        reader:
+        {
+            type: 'json',
+            rootProperty: 'issues'
+        }
     },
 
     fields: [
@@ -24,13 +35,16 @@ Ext.define('Ext.us.mantis.model.Ticket',
         name: 'categoryid',
         reference: 
         {
-            type: 'Category',
+            type: 'Ext.ux.mantis.model.Category',
             role: 'category',
             unique: true
         }
     },
     { 
         name: 'custom_fields' 
+    },
+    { 
+        name: 'handler'
     },
     { 
         name: 'notes' 

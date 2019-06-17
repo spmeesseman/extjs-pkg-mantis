@@ -1,4 +1,4 @@
-Ext.define('Ext.us.mantis.model.Reproducibility', 
+Ext.define('Ext.ux.mantis.model.Reproducibility', 
 {
     extend: 'Ext.data.Model',    
     alias: 'mantis.model.reproducibility',

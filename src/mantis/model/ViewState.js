@@ -1,4 +1,4 @@
-Ext.define('Ext.us.mantis.model.ViewState', 
+Ext.define('Ext.ux.mantis.model.ViewState', 
 {
     extend: 'Ext.data.Model',    
     alias: 'mantis.model.viewstate',

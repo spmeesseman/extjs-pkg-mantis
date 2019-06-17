@@ -1,9 +1,9 @@
 Ext.define('Ext.ux.mantis.store.Tickets', 
 {
     extend: 'Ext.data.Store',
-    alias: 'store.tickets',
+    alias: 'mantis.store.tickets',
     
-    model: 'Ext.ux.mantis.Ticket'
+    model: 'Ext.ux.mantis.model.Ticket'
 
 });
 

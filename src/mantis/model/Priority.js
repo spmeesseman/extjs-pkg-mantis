@@ -1,4 +1,4 @@
-Ext.define('Ext.us.mantis.model.Priority', 
+Ext.define('Ext.ux.mantis.model.Priority', 
 {
     extend: 'Ext.data.Model',    
     alias: 'mantis.model.priority',

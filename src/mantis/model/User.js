@@ -1,4 +1,4 @@
-Ext.define('Ext.us.mantis.model.User', 
+Ext.define('Ext.ux.mantis.model.User', 
 {
     extend: 'Ext.data.Model',    
     alias: 'mantis.model.user',

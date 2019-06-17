@@ -38,7 +38,7 @@
     ],
     "sencha": {
         "name": "mantis",
-        "namespace": "Ext",
+        "namespace": "Ext.ux",
         "framework": "ext",
         "type": "code",
         "creator": "spmeesseman",
@@ -54,7 +54,7 @@
             "paths": ""
         },
         "sass": {
-            "namespace": "Ext",
+            "namespace": "Ext.ux",
             "etc": [
                 "${package.dir}/sass/etc"
             ],

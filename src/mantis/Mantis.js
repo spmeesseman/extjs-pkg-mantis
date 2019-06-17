@@ -4,7 +4,9 @@ Ext.define('Ext.ux.mantis.Mantis',
     alias: 'Mantis',
     alternateClassName: 'Mantis',
 
-    require: [ 'Ext.util.Cookies' ],
+    require: [ 
+        'Ext.ux.mantis.store.Tickets'
+    ],
 
     logger: null,
     token: null,
@@ -14,14 +16,14 @@ Ext.define('Ext.ux.mantis.Mantis',
     {
         var me = this;
 
-        if (!me.token) {
+        if (!Ext.manifest.mantis.token) {
             if (me.logger) {
                 me.logger.error("Invalid token");
             }
             return;
         }
 
-        if (!me.project) {
+        if (!Ext.manifest.mantis.project) {
             if (me.logger) {
                 me.logger.error("Invalid project");
             }
@@ -33,14 +35,14 @@ Ext.define('Ext.ux.mantis.Mantis',
     {
         var me = this;
 
-        if (!me.token) {
+        if (!Ext.manifest.mantis.token) {
             if (me.logger) {
                 me.logger.error("Invalid token");
             }
             return;
         }
 
-        if (!me.project) {
+        if (!Ext.manifest.mantis.project) {
             if (me.logger) {
                 me.logger.error("Invalid project");
             }
@@ -97,20 +99,38 @@ Ext.define('Ext.ux.mantis.Mantis',
         var me = this;
         var deferred = new Ext.Deferred();
 
-        if (!me.token) {
+        if (!Ext.manifest.mantis.token) {
             if (me.logger) {
                 me.logger.error("Invalid token");
             }
             return Ext.Deferred.reject("Invalid token");
         }
 
-        if (!me.project) {
+        if (!Ext.manifest.mantis.project) {
             if (me.logger) {
                 me.logger.error("Invalid project");
             }
             return Ext.Deferred.reject("Invalid project");
         }
 
+        var store = Ext.create('Ext.ux.mantis.store.Tickets');
+        store.load(
+        {
+            scope: this,
+            callback: function(records, options, success) 
+            {
+                if (!success) {
+                    deferred.reject('Could not execute Mantis Rest API');
+                }
+                deferred.resolve(records);
+            },
+            params:
+            {
+
+            }
+        });
+
+        /*
         Ext.Ajax.request(
         {
             scope: this,
@@ -252,6 +272,7 @@ Ext.define('Ext.ux.mantis.Mantis',
                 deferred.reject('Could not execute Mantis RPC');
             }
         });
+        */
 
         return deferred.promise;
     },
@@ -262,14 +283,14 @@ Ext.define('Ext.ux.mantis.Mantis',
         var me = this;
         var deferred = new Ext.Deferred();
 
-        if (!me.token) {
+        if (!Ext.manifest.mantis.token) {
             if (me.logger) {
                 me.logger.error("Invalid token");
             }
             return Ext.Deferred.reject("Invalid token");;
         }
 
-        if (!me.project) {
+        if (!Ext.manifest.mantis.project) {
             if (me.logger) {
                 me.logger.error("Invalid project");
             }

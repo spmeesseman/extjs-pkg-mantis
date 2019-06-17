@@ -26,41 +26,24 @@ Ext.define('Ext.ux.mantis.Ticket',
 
         formulas:
         {
-            statusColor: function(get) 
-            {
-                var ticket = get('record');
-                if (ticket && ticket.data.status) 
-                {
-                    switch (ticket.data.status)
-                    {
-                        case "fixed":
-                            return "#00aa00";
-                        case "new":
-                            return "#7a039b";
-                        default:
-                            break;
-                    }
-                } 
-                return '#3bd3db';
-            },
-
             typeColor: function(get) 
             {
                 var ticket = get('record');
-                if (ticket && ticket.data.type) 
+                if (ticket && ticket.data.custom_fields && ticket.data.custom_fields[0].value) 
                 {
-                    switch (ticket.data.type)
+                    switch (ticket.data.custom_fields[0].value)
                     {
                         case "bug":
-                        case "defect":
-                            return "#ee0000";
-                        case "enhancement":
+                            return "#f7274d";
+                        case "feature":
                             return "#4286f4";
+                        case "task":
+                            return "#309995";
                         default:
                             break;
                     }
                 } 
-                return '#0000dd';
+                return '#b295af';
             }
         }
     },
@@ -125,7 +108,7 @@ Ext.define('Ext.ux.mantis.Ticket',
             {
                 bind: 
                 {
-                    html: '{record.type}',
+                    html: '{record.custom_fields&&record.custom_fields.0.value?record.custom_fields.0.value:\'unknown\'}',
                     bodyStyle: 
                     {
                         'color': 'white',
@@ -143,11 +126,11 @@ Ext.define('Ext.ux.mantis.Ticket',
             {
                 bind: 
                 {
-                    html: '{record.status}',
+                    html: '{record.status.name}',
                     bodyStyle: 
                     {
-                        'color': 'white',
-                        'background': '{statusColor}',
+                        'color': '#222222',
+                        'background': '{record.status.color}',
                         'text-align':'right',
                         'border-radius': '5px'
                     }
@@ -157,7 +140,7 @@ Ext.define('Ext.ux.mantis.Ticket',
         }]
     },
     {
-        cls: 'mantis-ticket-list-ticket-summary mantis-text-shadow-letterpress',
+        cls: 'mantis-ticket-list-ticket-summary',
         bind: 
         {
             html: '{record.summary}'

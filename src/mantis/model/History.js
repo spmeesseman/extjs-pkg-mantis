@@ -1,4 +1,4 @@
-Ext.define('Ext.us.mantis.model.History', 
+Ext.define('Ext.ux.mantis.model.History', 
 {
     extend: 'Ext.data.Model',    
     alias: 'mantis.model.history',
