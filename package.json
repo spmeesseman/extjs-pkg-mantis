@@ -1,0 +1,80 @@
+{
+    "name": "@perryjohnson/extjs-pkg-mantis",
+    "version": "1.0.0",
+    "displayName": "ExtJS Package Wrapper for Mantis",
+    "description": "ExtJS Package Wrapper for Mantis RPC",
+    "license": "MIT",
+    "author": {
+        "name": "Scott Meesseman",
+        "email": "spmeesseman@gmail.com"
+    },
+    "homepage": "https://github.com/spmeesseman/extjs-pkg-mantis/blob/master/README.md",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/spmeesseman/extjs-pkg-mantis.git"
+    },
+    "bugs": {
+        "url": "https://github.com/spmeesseman/extjs-pkg-mantis/issues"
+    },
+    "devDependencies": {
+        "@perryjohnson/app-publisher": "^1.4.13"
+    },
+    "scripts": {
+        "app-publish": "app-publisher -p ps",
+        "app-publish-dry": "app-publisher -p ps --dry-run"
+    },
+    "keywords": [
+        "sencha extjs",
+        "mantis",
+        "ticket system",
+        "project management"
+    ],
+    "publishConfig": {
+        "access": "public"
+    },
+    "files": [
+        "src"
+    ],
+    "sencha": {
+        "name": "mantis",
+        "namespace": "Ext",
+        "framework": "ext",
+        "type": "code",
+        "creator": "spmeesseman",
+        "summary": "Package wrapper singleton for mantis",
+        "detailedDescription": "Package wrapper singleton for mantis RPC",
+        "version": "1.0.0.0",
+        "compatVersion": "1.0.0",
+        "format": "1",
+        "slicer": null,
+        "output": "${framework.dir}/build/packages/${package.name}",
+        "local": true,
+        "resource": {
+            "paths": ""
+        },
+        "sass": {
+            "namespace": "Ext",
+            "etc": [
+                "${package.dir}/sass/etc"
+            ],
+            "var": [
+                "${package.dir}/sass/var"
+            ],
+            "src": [
+                "${package.dir}/sass/src"
+            ]
+        },
+        "classpath": [
+            "${package.dir}/src"
+        ],
+        "overrides": [
+            "${package.dir}/overrides"
+        ],
+        "requires": [
+            "core"
+        ],
+        "ignore": [
+            "(^|/)CVS(/?$|/.*?$)"
+        ]
+    }
+}
