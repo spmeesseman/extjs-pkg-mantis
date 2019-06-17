@@ -5,7 +5,7 @@ Ext.define('Ext.ux.mantis.Tickets',
     xtype: 'tickets',
     
     requires: [ 
-        'Ext.ux.mantis.Trac',
+        'Ext.ux.mantis.Mantis',
         'Ext.ux.mantis.Ticket'
     ],
 
@@ -42,7 +42,7 @@ Ext.define('Ext.ux.mantis.Tickets',
             var me = this;
             var view = me.up('help');
             var mask = ToolkitUtils.mask(view, "Retrieving your tickets");
-            Trac.getTickets().then((tickets) =>
+            Mantis.getTickets().then((tickets) =>
             {
                 ToolkitUtils.unmask(mask); 
                 Utils.log("Got " + tickets.length + " tickets", 1);
@@ -52,7 +52,7 @@ Ext.define('Ext.ux.mantis.Tickets',
                 Utils.logValue("   Tickets", tickets, 2);
                 for (var t in tickets) {
                     try {
-                        me.items.items[0].items.items[0].add(Ext.create('GEMS.view.miscellaneous.help.Ticket',
+                        me.items.items[0].items.items[0].add(Ext.create('Ext.ux.mantis.Ticket',
                         {
                             viewModel: { data: { record: tickets[t] } }
                         }));

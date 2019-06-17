@@ -1,5 +1,5 @@
 {
-    "name": "@perryjohnson/extjs-pkg-mantis",
+    "name": "@spmeesseman/extjs-pkg-mantis",
     "version": "1.0.0",
     "displayName": "ExtJS Package Wrapper for Mantis",
     "description": "ExtJS Package Wrapper for Mantis RPC",
@@ -33,7 +33,8 @@
         "access": "public"
     },
     "files": [
-        "src"
+        "src",
+        "sass"
     ],
     "sencha": {
         "name": "mantis",

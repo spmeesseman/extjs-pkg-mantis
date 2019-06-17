@@ -6,100 +6,24 @@ Ext.define('Ext.ux.mantis.Mantis',
 
     require: [ 'Ext.util.Cookies' ],
 
-    user: 'smeesseman',
-    password: '',
-    repository: null,
     logger: null,
+    token: null,
+    project: null,
 
-    privates:
-    {
-        _authenticated: false
-    },
-
-
-    authenticate: function(request) 
-    {
-        var me = this;
-        var deferred = new Ext.Deferred();
-
-        if (!me._authenticated)
-        {
-            var matches = document.cookie.match(/Mantis_auth="(.*)"/);
-            if (matches && matches.length > 0) {
-                console.log("COOKIE EXISTS");
-                return Ext.Deferred.resolved(true);
-            }
-
-            Ext.Ajax.request(
-            {
-                scope: this,
-                url: 'https://app1.development.pjats.com/projects/gems2/login',
-                withCredentials: true,
-                useDefaultXhrHeader: false,
-                success: function(response, options)
-                {               
-                    matches = response.responseText.match(/name="__FORM_TOKEN" value="(.*)" /);
-                    if (matches.length === 2) 
-                    {
-                        Ext.Ajax.request(
-                        {
-                            scope: this,
-                            url: 'https://app1.development.pjats.com/projects/gems2/login',
-                            method: 'POST',
-                            withCredentials: true,
-                            useDefaultXhrHeader: false,
-                            params:
-                            {
-                                __FORM_TOKEN: matches[1],
-                                username: Mantis.user,
-                                password: Mantis.password,
-                                submit: 'Login'
-                            },
-                            success: function(response2, options2)
-                            {               
-                                deferred.resolve(true);
-                            },
-                            failure: function(response2, options2)
-                            {
-                                deferred.reject('Authentication failed (POST)');
-                            }
-                        });
-                    }
-                    else {
-                        deferred.reject('Authentication failed (GET1)');
-                    }
-                },
-                failure: function(response, options)
-                {
-                    //
-                    // Failed to retrieve the Login page
-                    //
-                    // This is probably because a session already exists, we can resolve()
-                    //
-                    // Note that a CORS error is thrown here as requesting the login page redirects to
-                    // '/', with an origin of 'null' in the response header (have not looked into)
-                    // Seems it is safe to ignore, for correct operation
-                    //
-                    //deferred.reject('Authentication failed (GET0)');
-                    deferred.resolve(true);
-                }
-            });
-        }
-        else {
-            return Ext.Deferred.resolved(true);
-        }
-
-        return deferred.promise;
-    },
-
-    
     createIssue: function()
     {
         var me = this;
 
-        if (!me.repository) {
+        if (!me.token) {
             if (me.logger) {
-                me.logger.error("Invalid repository");
+                me.logger.error("Invalid token");
+            }
+            return;
+        }
+
+        if (!me.project) {
+            if (me.logger) {
+                me.logger.error("Invalid project");
             }
             return;
         }
@@ -109,16 +33,23 @@ Ext.define('Ext.ux.mantis.Mantis',
     {
         var me = this;
 
-        if (!me.repository) {
+        if (!me.token) {
             if (me.logger) {
-                me.logger.error("Invalid repository");
+                me.logger.error("Invalid token");
+            }
+            return;
+        }
+
+        if (!me.project) {
+            if (me.logger) {
+                me.logger.error("Invalid project");
             }
             return;
         }
     },
 
     
-    parseMantisRpcRsp: function(response)
+    parseMantisRsp: function(response)
     {
         var json;
         try {
@@ -166,19 +97,30 @@ Ext.define('Ext.ux.mantis.Mantis',
         var me = this;
         var deferred = new Ext.Deferred();
 
-        me.authenticate().then((token) => {
+        if (!me.token) {
+            if (me.logger) {
+                me.logger.error("Invalid token");
+            }
+            return Ext.Deferred.reject("Invalid token");
+        }
+
+        if (!me.project) {
+            if (me.logger) {
+                me.logger.error("Invalid project");
+            }
+            return Ext.Deferred.reject("Invalid project");
+        }
+
         Ext.Ajax.request(
         {
             scope: this,
-            url: 'https://app1.development.pjats.com/projects/gems2/login/rpc',
-            method: 'POST',
-            withCredentials: true,
-            userName: Mantis.user,
-            password: Mantis.password,
+            url: 'https://app1.development.pjats.com/projects/api/rest/issues',
+            method: 'GET',
+            //withCredentials: true,
             useDefaultXhrHeader: false,
             headers:
             {
-                Authorization: 'Basic ' + btoa(Mantis.user + ':' + Mantis.password)
+                Authorization: Mantis.token
             },
             jsonData:
             {
@@ -188,7 +130,100 @@ Ext.define('Ext.ux.mantis.Mantis',
                 page: 1
             },
             success: function(response, options)
-            {               
+            {  
+                //
+                // Example response (array) (1 item)
+                //
+                // {
+                //    "issues": [
+                //    {
+                //       "id": 35,
+                //       "summary": "Document Normals",
+                //       "description": "Document Normals View",
+                //       "project": {
+                //           "id": 1,
+                //           "name": "GEMS2"
+                //       },
+                //       "category": {
+                //           "id": 1,
+                //           "name": "General"
+                //       },
+                //       "version": {
+                //           "id": 1,
+                //           "name": "1.5.4"
+                //       },
+                //       "target_version": {
+                //           "id": 5,
+                //           "name": "1.8.0"
+                //       },
+                //       "reporter": {
+                //           "id": 2,
+                //           "name": "smeesseman",
+                //           "real_name": "Scott Meesseman",
+                //           "email": "smeesseman@pjats.com"
+                //       },
+                //       "status": {
+                //           "id": 10,
+                //           "name": "new",
+                //           "label": "new",
+                //           "color": "#fcbdbd"
+                //       },
+                //       "resolution": {
+                //           "id": 10,
+                //           "name": "open",
+                //           "label": "open"
+                //       },
+                //       "view_state": {
+                //           "id": 10,
+                //           "name": "public",
+                //           "label": "public"
+                //       },
+                //       "priority": {
+                //           "id": 30,
+                //           "name": "normal",
+                //           "label": "normal"
+                //       },
+                //       "severity": {
+                //           "id": 10,
+                //           "name": "feature",
+                //           "label": "feature"
+                //       },
+                //       "reproducibility": {
+                //           "id": 100,
+                //           "name": "N\/A",
+                //           "label": "N\/A"
+                //       },
+                //       "sticky": false,
+                //       "created_at": "2019-06-16T14:16:55-04:00",
+                //       "updated_at": "2019-06-16T14:16:55-04:00",
+                //       "custom_fields": [
+                //           {
+                //           "field": {
+                //               "id": 1,
+                //               "name": "Type"
+                //           },
+                //           "value": "feature"
+                //           }
+                //       ],
+                //       "history": [
+                //           {
+                //           "created_at": "2019-06-16T14:16:55-04:00",
+                //           "user": {
+                //               "id": 2,
+                //               "name": "smeesseman",
+                //               "real_name": "Scott Meesseman",
+                //               "email": "smeesseman@pjats.com"
+                //           },
+                //           "type": {
+                //               "id": 1,
+                //               "name": "issue-new"
+                //           },
+                //           "message": "New Issue"
+                //           }
+                //       ]
+                //    }] 
+                // }
+                //            
                 var ticketIds = me.parseMantisRpcRsp(response);
                 if (ticketIds.length > 0)
                 {
@@ -216,7 +251,7 @@ Ext.define('Ext.ux.mantis.Mantis',
             {
                 deferred.reject('Could not execute Mantis RPC');
             }
-        }); }, (e) => { deferred.reject(e); });
+        });
 
         return deferred.promise;
     },
@@ -227,18 +262,29 @@ Ext.define('Ext.ux.mantis.Mantis',
         var me = this;
         var deferred = new Ext.Deferred();
 
+        if (!me.token) {
+            if (me.logger) {
+                me.logger.error("Invalid token");
+            }
+            return Ext.Deferred.reject("Invalid token");;
+        }
+
+        if (!me.project) {
+            if (me.logger) {
+                me.logger.error("Invalid project");
+            }
+            return Ext.Deferred.reject("Invalid project");
+        }
+
         Ext.Ajax.request(
         {
             scope: this,
             url: 'https://app1.development.pjats.com/projects/gems2/login/rpc',
-            method: 'POST',
-            withCredentials: true,
-            userName: Mantis.user,
-            password: Mantis.password,
+            //withCredentials: true,
             useDefaultXhrHeader: false,
             headers:
             {
-                Authorization: 'Basic ' + btoa(Mantis.user + ':' + Mantis.password)
+                Authorization: Mantis.token
             },
             jsonData:
             {
