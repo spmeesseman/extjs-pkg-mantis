@@ -1,0 +1,9 @@
+
+.mantis-ticket-list-ticket-hover .x-panel-body 
+{
+    background: $neutral-color; 
+    background: -webkit-linear-gradient(left top, $body-background-color, $neutral-color); 
+    background: -o-linear-gradient(bottom right, $body-background-color, $neutral-color); 
+    background: -moz-linear-gradient(bottom right, $body-background-color, $neutral-color); 
+    background: linear-gradient(to bottom right, $body-background-color, $neutral-color); 
+}

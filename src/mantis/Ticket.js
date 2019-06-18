@@ -5,6 +5,7 @@ Ext.define('Ext.ux.mantis.Ticket',
     xtype: 'ticket',
     
     requires: [
+        'Ext.ux.mantis.TicketHeader',
         'Ext.ux.mantis.TicketDetail'
     ],
 
@@ -22,29 +23,6 @@ Ext.define('Ext.ux.mantis.Ticket',
     {
         data: {
             record: null
-        },
-
-        formulas:
-        {
-            typeColor: function(get) 
-            {
-                var ticket = get('record');
-                if (ticket && ticket.data.custom_fields && ticket.data.custom_fields[0].value) 
-                {
-                    switch (ticket.data.custom_fields[0].value)
-                    {
-                        case "bug":
-                            return "#f7274d";
-                        case "feature":
-                            return "#4286f4";
-                        case "task":
-                            return "#309995";
-                        default:
-                            break;
-                    }
-                } 
-                return '#b295af';
-            }
         }
     },
 
@@ -83,61 +61,7 @@ Ext.define('Ext.ux.mantis.Ticket',
 
     items: [
     {
-        layout:
-        {
-            type: 'hbox',
-            align: 'stretch',
-            pack  : 'start'
-        },
-        bodyStyle: 
-        {
-            background: 'transparent'
-        },
-        items: [
-        {
-            flex: 1,
-            cls: 'mantis-ticket-list-ticket-id mantis-text-shadow-letterpress',
-            bind: 
-            {
-                html: '<span class="fal fa-ticket-alt"></span> Ticket #{record.id}'
-            }
-        },
-        {
-            margin: '0 5 0 0',
-            items: [
-            {
-                bind: 
-                {
-                    html: '{record.custom_fields&&record.custom_fields.0.value?record.custom_fields.0.value:\'unknown\'}',
-                    bodyStyle: 
-                    {
-                        'color': 'white',
-                        'background': '{typeColor}',
-                        'text-align':'right',
-                        'border-radius': '5px'
-                    }
-                },
-                bodyPadding: '3 5 3 5'
-            }]
-        },
-        {
-            margin: '0 10 0 0',
-            items: [
-            {
-                bind: 
-                {
-                    html: '{record.status.name}',
-                    bodyStyle: 
-                    {
-                        'color': '#222222',
-                        'background': '{record.status.color}',
-                        'text-align':'right',
-                        'border-radius': '5px'
-                    }
-                },
-                bodyPadding: '3 5 3 5'
-            }]
-        }]
+        xtype: 'ticketheader'
     },
     {
         cls: 'mantis-ticket-list-ticket-summary',
@@ -150,7 +74,7 @@ Ext.define('Ext.ux.mantis.Ticket',
         cls: 'mantis-ticket-list-ticket-description',
         bind: 
         {
-            html: '{record.description}'
+            html: '{record.shortDescription}'
         }
     }]
 

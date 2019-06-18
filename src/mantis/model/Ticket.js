@@ -13,6 +13,7 @@ Ext.define('Ext.ux.mantis.model.Ticket',
         url: 'https://app1.development.pjats.com/projects/api/rest/issues',
         withCredentials: true,
         useDefaultXhrHeader: false,
+        limitParam: 'page_size',
         headers:
         {
             Authorization: Ext.manifest.mantis.token
@@ -74,6 +75,9 @@ Ext.define('Ext.ux.mantis.model.Ticket',
         name: 'status'
     },
     { 
+        name: 'tags'
+    },
+    { 
         name: 'target_version'
     },
     { 
@@ -84,6 +88,18 @@ Ext.define('Ext.ux.mantis.model.Ticket',
     },
     { 
         name: 'history' 
-    }]
+    },
+    {
+        name: 'shortDescription', 
+        convert: function(v, rec) 
+        {
+            if (rec.get('description') && rec.get('description').length > 300) {
+                return rec.get('description').substring(0, 300) + '...';
+            }
+            return rec.get('description');
+        },
+        depends: ['description'],
+        persist: false
+    },]
 
 });

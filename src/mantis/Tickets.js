@@ -5,18 +5,34 @@ Ext.define('Ext.ux.mantis.Tickets',
     xtype: 'tickets',
     
     requires: [ 
-        'Ext.ux.mantis.Mantis',
-        'Ext.ux.mantis.Ticket'
+        'Ext.ux.mantis.NewTicket',
+        'Ext.ux.mantis.Ticket',
+        'Ext.ux.mantis.TicketList'
     ],
 
     flex:1,
-    border: false,
+    border: true,
     bodyPadding: '5 5 5 5',
 
     items: [
     {
-        title: 'Open Tickets',
-        scrollable: true,
+        title: 'New Ticket',
+        border: false,
+        iconCls: 'far fa-ticket-alt',
+        layout: 
+        {
+            type: 'vbox',
+            align : 'stretch',
+            pack  : 'start'
+        },
+        items: [
+        {
+            xtype: 'newticket'
+        }]
+    },
+    {
+        title: 'My Open Tickets',
+        border: false,
         iconCls: 'far fa-bars',
         layout: 
         {
@@ -26,43 +42,26 @@ Ext.define('Ext.ux.mantis.Tickets',
         },
         items: [
         {
-            layout: 
-            {
-                type: 'vbox',
-                align : 'stretch',
-                pack  : 'start'
+            xtype: 'ticketlist',
+            params: {
+                filter_id: 'reported'
             }
         }]
-    }],
-
-    listeners:
+    },
     {
-        boxready: function()
+        title: 'All Tickets',
+        border: false,
+        iconCls: 'far fa-bars',
+        layout: 
         {
-            var me = this;
-            var view = me.up('help');
-            var mask = ToolkitUtils.mask(view, "Retrieving your tickets");
-            Mantis.getTickets().then((tickets) =>
-            {
-                ToolkitUtils.unmask(mask); 
-                Utils.log("Got " + tickets.length + " tickets", 1);
-                if (!tickets) {
-                    return;
-                }
-                Utils.logValue("   Tickets", tickets, 2);
-                for (var t in tickets) {
-                    try {
-                        me.items.items[0].items.items[0].add(Ext.create('Ext.ux.mantis.Ticket',
-                        {
-                            viewModel: { data: { record: tickets[t] } }
-                        }));
-                    }
-                    catch(e) {
-                        console.error(e);
-                    }
-                }
-            }, (e) => { ToolkitUtils.unmask(mask); Utils.alertError(e); });
-        }
-    }
+            type: 'vbox',
+            align : 'stretch',
+            pack  : 'start'
+        },
+        items: [
+        {
+            xtype: 'ticketlist'
+        }]
+    }]
     
 });

@@ -23,7 +23,7 @@ Ext.define('Ext.ux.mantis.Mantis',
             return;
         }
 
-        if (!Ext.manifest.mantis.project) {
+        if (!Ext.manifest.mantis.project_id) {
             if (me.logger) {
                 me.logger.error("Invalid project");
             }
@@ -42,7 +42,7 @@ Ext.define('Ext.ux.mantis.Mantis',
             return;
         }
 
-        if (!Ext.manifest.mantis.project) {
+        if (!Ext.manifest.mantis.project_id) {
             if (me.logger) {
                 me.logger.error("Invalid project");
             }
@@ -93,8 +93,101 @@ Ext.define('Ext.ux.mantis.Mantis',
         return json.result;
     },
 
+    //
+    // Example getTickets() response
+    //
+    // {
+    //    "issues": [
+    //    {
+    //       "id": 35,
+    //       "summary": "Document Normals",
+    //       "description": "Document Normals View",
+    //       "project": {
+    //           "id": 1,
+    //           "name": "GEMS2"
+    //       },
+    //       "category": {
+    //           "id": 1,
+    //           "name": "General"
+    //       },
+    //       "version": {
+    //           "id": 1,
+    //           "name": "1.5.4"
+    //       },
+    //       "target_version": {
+    //           "id": 5,
+    //           "name": "1.8.0"
+    //       },
+    //       "reporter": {
+    //           "id": 2,
+    //           "name": "smeesseman",
+    //           "real_name": "Scott Meesseman",
+    //           "email": "smeesseman@pjats.com"
+    //       },
+    //       "status": {
+    //           "id": 10,
+    //           "name": "new",
+    //           "label": "new",
+    //           "color": "#fcbdbd"
+    //       },
+    //       "resolution": {
+    //           "id": 10,
+    //           "name": "open",
+    //           "label": "open"
+    //       },
+    //       "view_state": {
+    //           "id": 10,
+    //           "name": "public",
+    //           "label": "public"
+    //       },
+    //       "priority": {
+    //           "id": 30,
+    //           "name": "normal",
+    //           "label": "normal"
+    //       },
+    //       "severity": {
+    //           "id": 10,
+    //           "name": "feature",
+    //           "label": "feature"
+    //       },
+    //       "reproducibility": {
+    //           "id": 100,
+    //           "name": "N\/A",
+    //           "label": "N\/A"
+    //       },
+    //       "sticky": false,
+    //       "created_at": "2019-06-16T14:16:55-04:00",
+    //       "updated_at": "2019-06-16T14:16:55-04:00",
+    //       "custom_fields": [
+    //           {
+    //           "field": {
+    //               "id": 1,
+    //               "name": "Type"
+    //           },
+    //           "value": "feature"
+    //           }
+    //       ],
+    //       "history": [
+    //           {
+    //           "created_at": "2019-06-16T14:16:55-04:00",
+    //           "user": {
+    //               "id": 2,
+    //               "name": "smeesseman",
+    //               "real_name": "Scott Meesseman",
+    //               "email": "smeesseman@pjats.com"
+    //           },
+    //           "type": {
+    //               "id": 1,
+    //               "name": "issue-new"
+    //           },
+    //           "message": "New Issue"
+    //           }
+    //       ]
+    //    }] 
+    // }
+    //         
 
-    getTickets: function()
+    getTickets: function(params)
     {
         var me = this;
         var deferred = new Ext.Deferred();
@@ -106,14 +199,26 @@ Ext.define('Ext.ux.mantis.Mantis',
             return Ext.Deferred.reject("Invalid token");
         }
 
-        if (!Ext.manifest.mantis.project) {
+        if (!Ext.manifest.mantis.project_id) {
             if (me.logger) {
                 me.logger.error("Invalid project");
             }
             return Ext.Deferred.reject("Invalid project");
         }
 
+        if (!params) {
+            params = {};
+        }
+
         var store = Ext.create('Ext.ux.mantis.store.Tickets');
+
+        //
+        // If the token is specified at runtime, we need to reset proxy authorization
+        //
+        var proxy = store.getProxy();
+        proxy.setHeaders({ Authorization: Ext.manifest.mantis.token });
+        proxy.setExtraParams(Ext.merge({ project_id: Ext.manifest.mantis.project_id }, params));
+
         store.load(
         {
             scope: this,
@@ -122,157 +227,9 @@ Ext.define('Ext.ux.mantis.Mantis',
                 if (!success) {
                     deferred.reject('Could not execute Mantis Rest API');
                 }
-                deferred.resolve(records);
-            },
-            params:
-            {
-
+                deferred.resolve(store);
             }
         });
-
-        /*
-        Ext.Ajax.request(
-        {
-            scope: this,
-            url: 'https://app1.development.pjats.com/projects/api/rest/issues',
-            method: 'GET',
-            //withCredentials: true,
-            useDefaultXhrHeader: false,
-            headers:
-            {
-                Authorization: Mantis.token
-            },
-            jsonData:
-            {
-                params: [ "status!=closed" ],
-                method: "ticket.query",
-                max: 0,
-                page: 1
-            },
-            success: function(response, options)
-            {  
-                //
-                // Example response (array) (1 item)
-                //
-                // {
-                //    "issues": [
-                //    {
-                //       "id": 35,
-                //       "summary": "Document Normals",
-                //       "description": "Document Normals View",
-                //       "project": {
-                //           "id": 1,
-                //           "name": "GEMS2"
-                //       },
-                //       "category": {
-                //           "id": 1,
-                //           "name": "General"
-                //       },
-                //       "version": {
-                //           "id": 1,
-                //           "name": "1.5.4"
-                //       },
-                //       "target_version": {
-                //           "id": 5,
-                //           "name": "1.8.0"
-                //       },
-                //       "reporter": {
-                //           "id": 2,
-                //           "name": "smeesseman",
-                //           "real_name": "Scott Meesseman",
-                //           "email": "smeesseman@pjats.com"
-                //       },
-                //       "status": {
-                //           "id": 10,
-                //           "name": "new",
-                //           "label": "new",
-                //           "color": "#fcbdbd"
-                //       },
-                //       "resolution": {
-                //           "id": 10,
-                //           "name": "open",
-                //           "label": "open"
-                //       },
-                //       "view_state": {
-                //           "id": 10,
-                //           "name": "public",
-                //           "label": "public"
-                //       },
-                //       "priority": {
-                //           "id": 30,
-                //           "name": "normal",
-                //           "label": "normal"
-                //       },
-                //       "severity": {
-                //           "id": 10,
-                //           "name": "feature",
-                //           "label": "feature"
-                //       },
-                //       "reproducibility": {
-                //           "id": 100,
-                //           "name": "N\/A",
-                //           "label": "N\/A"
-                //       },
-                //       "sticky": false,
-                //       "created_at": "2019-06-16T14:16:55-04:00",
-                //       "updated_at": "2019-06-16T14:16:55-04:00",
-                //       "custom_fields": [
-                //           {
-                //           "field": {
-                //               "id": 1,
-                //               "name": "Type"
-                //           },
-                //           "value": "feature"
-                //           }
-                //       ],
-                //       "history": [
-                //           {
-                //           "created_at": "2019-06-16T14:16:55-04:00",
-                //           "user": {
-                //               "id": 2,
-                //               "name": "smeesseman",
-                //               "real_name": "Scott Meesseman",
-                //               "email": "smeesseman@pjats.com"
-                //           },
-                //           "type": {
-                //               "id": 1,
-                //               "name": "issue-new"
-                //           },
-                //           "message": "New Issue"
-                //           }
-                //       ]
-                //    }] 
-                // }
-                //            
-                var ticketIds = me.parseMantisRpcRsp(response);
-                if (ticketIds.length > 0)
-                {
-                    var tId = 0;
-                    var tickets = [];
-                    function _getTicket(id)
-                    {
-                        me.getTicket(id).then((ticket) =>
-                        {
-                            if (tId < ticketIds.length - 1) 
-                            {
-                                tickets.push(ticket);
-                                _getTicket(ticketIds[++tId]);
-                            }
-                            else {
-                                deferred.resolve(tickets);
-                            }
-                        },
-                        (e) => { deferred.reject(e); });
-                    }
-                    _getTicket(ticketIds[tId]);
-                }
-            },
-            failure: function(response, options)
-            {
-                deferred.reject('Could not execute Mantis RPC');
-            }
-        });
-        */
 
         return deferred.promise;
     },
@@ -287,10 +244,10 @@ Ext.define('Ext.ux.mantis.Mantis',
             if (me.logger) {
                 me.logger.error("Invalid token");
             }
-            return Ext.Deferred.reject("Invalid token");;
+            return Ext.Deferred.reject("Invalid token");
         }
 
-        if (!Ext.manifest.mantis.project) {
+        if (!Ext.manifest.mantis.project_id) {
             if (me.logger) {
                 me.logger.error("Invalid project");
             }
@@ -346,7 +303,6 @@ Ext.define('Ext.ux.mantis.Mantis',
                 });
 
                 deferred.resolve(ticket);
-
             },
             failure: function(response, options)
             {

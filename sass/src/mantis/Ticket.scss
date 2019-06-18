@@ -12,22 +12,6 @@
     border-bottom: 2px !important;
 }
 
-.mantis-ticket-list-ticket-hover .x-panel-body 
-{
-    //@include box-shadow(0, 1px, 2px, 0, rgba(0, 0, 0, 0.2));
-    background: $neutral-color; 
-    background: -webkit-linear-gradient(left top, $body-background-color, $neutral-color); 
-    background: -o-linear-gradient(bottom right, $body-background-color, $neutral-color); 
-    background: -moz-linear-gradient(bottom right, $body-background-color, $neutral-color); 
-    background: linear-gradient(to bottom right, $body-background-color, $neutral-color); 
-    //border-radius: 10px;
-}
-
-.mantis-ticket-list-ticket-hover .x-panel-body 
-{
-    //border-radius: 10px;
-}
-
 .mantis-ticket-list-ticket-id .x-panel-body 
 { 
     color: #555555;
