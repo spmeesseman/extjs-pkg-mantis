@@ -7,7 +7,7 @@ Ext.define('Ext.ux.mantis.TicketList',
     requires: [ 
         'Ext.ux.mantis.Ticket',
         'Ext.ux.mantis.store.Tickets',
-        'Ext.toolbar.Paging'
+        Ext.platformTags.desktop ? 'Ext.toolbar.Paging' : 'Ext.grid.PagingToolbar'
     ],
 
     border: false,
@@ -17,7 +17,6 @@ Ext.define('Ext.ux.mantis.TicketList',
     config:
     {
         store: null,
-    init: false,
         params: {}
     },
 
