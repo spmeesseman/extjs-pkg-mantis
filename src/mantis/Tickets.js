@@ -11,13 +11,11 @@ Ext.define('Ext.ux.mantis.Tickets',
     ],
 
     flex:1,
-    border: true,
-    bodyPadding: '5 5 5 5',
+    border: false,
 
     items: [
     {
         title: 'New Ticket',
-        border: false,
         iconCls: 'far fa-ticket-alt',
         layout: 
         {
@@ -32,7 +30,6 @@ Ext.define('Ext.ux.mantis.Tickets',
     },
     {
         title: 'My Open Tickets',
-        border: false,
         iconCls: 'far fa-bars',
         layout: 
         {
@@ -50,7 +47,6 @@ Ext.define('Ext.ux.mantis.Tickets',
     },
     {
         title: 'All Tickets',
-        border: false,
         iconCls: 'far fa-bars',
         layout: 
         {

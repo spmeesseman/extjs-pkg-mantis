@@ -87,7 +87,6 @@ Ext.define('Ext.ux.mantis.TicketList',
         var mask = ToolkitUtils.mask(me, "Retrieving tickets");
         me.getTicketCount().then((count) =>
         {
-            console.warn(store);
             store.getTotalCount = function() { return count; };
             store.getProxy().setExtraParams(Ext.merge({ project_id: Ext.manifest.mantis.project_id }, me.getParams() ? me.getParams() : {}));
             store.load(
