@@ -11,7 +11,6 @@ Ext.define('Ext.ux.mantis.model.Ticket',
     proxy: {
         type: 'rest',
         url: 'https://app1.development.pjats.com/projects/api/rest/issues',
-        withCredentials: true,
         useDefaultXhrHeader: false,
         limitParam: 'page_size',
         headers:
