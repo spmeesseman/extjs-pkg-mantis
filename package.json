@@ -1,7 +1,7 @@
 {
     "name": "@spmeesseman/extjs-pkg-mantis",
     "description": "ExtJS Package Wrapper for Mantis RPC",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "license": "MIT",
     "author": {
         "name": "Scott Meesseman",
