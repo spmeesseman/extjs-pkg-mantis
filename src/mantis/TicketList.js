@@ -10,9 +10,10 @@ Ext.define('Ext.ux.mantis.TicketList',
         Ext.platformTags.desktop ? 'Ext.toolbar.Paging' : 'Ext.grid.PagingToolbar'
     ],
 
-    border: false,
+    //border: true,
     flex: 1,
     scrollable: true,
+    bodyPadding: '5 5 5 5',
 
     config:
     {

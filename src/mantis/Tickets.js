@@ -12,7 +12,7 @@ Ext.define('Ext.ux.mantis.Tickets',
 
     flex:1,
     border: false,
-
+    
     items: [
     {
         title: 'New Ticket',
@@ -47,6 +47,7 @@ Ext.define('Ext.ux.mantis.Tickets',
     },
     {
         title: 'All Tickets',
+        border: false,
         iconCls: 'far fa-bars',
         layout: 
         {

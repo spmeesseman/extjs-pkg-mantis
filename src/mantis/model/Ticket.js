@@ -5,7 +5,12 @@ Ext.define('Ext.ux.mantis.model.Ticket',
     alias: 'mantis.model.ticket',
     
     requires: [
-        'Ext.ux.mantis.model.Category'
+        //'Ext.ux.mantis.Mantis',
+        'Ext.ux.mantis.model.Category',
+        'Ext.ux.mantis.model.Priority',
+        'Ext.ux.mantis.model.Project',
+        'Ext.ux.mantis.model.Reproducibility',
+        'Ext.ux.mantis.model.Severity'
     ],
 
     proxy: {
@@ -20,19 +25,94 @@ Ext.define('Ext.ux.mantis.model.Ticket',
         reader:
         {
             type: 'json',
-            rootProperty: 'issues'
+            rootProperty: 'issue'
+        },
+        writer:
+        {
+            allDataOptions:
+            {
+                //critical: true,
+                //changes: true,    
+                persist: true,     // Default
+                associated: true,  // Override default false
+                associatedSave: true     // Custom  (See override Model.js)
+            },
+            partialDataOptions:
+            {
+                changes: true,     // Default
+                critical: true,    // Default
+                associated: true,  // Override default false,
+                droppedAssociated: true, // Custom (See override Model.js)
+                associatedSave: true     // Custom  (See override Model.js)
+            }
         }
+    },
+/*
+    constructor:function()
+    {
+        var me = this;
+        var data = arguments[0] || {};
+        var tvs = Ext.manifest.mantis.defaultTicketValues;
+            
+        if (tvs)
+        {
+            for (var f in me.fields) 
+            {
+                if (tvs[me.fields[f].name]) {
+                    //me.fields[f].defaultValue = tvs[me.fields[f].name]; //{ name: tvs[me.fields[f].name] };
+                    //me.fields[f].set['me.fields[f].name']({})
+                } 
+            }
+        }
+
+        if (arguments.length === 0)
+            this.callParent([data]);
+        else
+            this.callParent(arguments); 
+    },
+*/
+    // eslint-disable-next-line consistent-return
+    save: function(options)
+    {
+        var me = this;
+
+        if (!Ext.manifest.mantis.token || !Ext.manifest.mantis.project_id) {
+            return false;
+        }
+        
+        if (me.phantom) {
+            me.set('created_at', new Date());
+            me.set('project', { id: Ext.manifest.mantis.project_id });
+            if (Ext.manifest.mantis.defaultTicketValues.custom_fields) {
+                me.set('custom_fields', Ext.manifest.mantis.defaultTicketValues.custom_fields);
+            }
+        }
+
+        try
+        {
+            me.getProxy().setHeaders(
+            {
+                Authorization: Ext.manifest.mantis.token
+            });
+        }
+        catch(e) {}
+
+        //
+        // Proceed to parent save()
+        //
+        me.callParent([options]);
     },
 
     fields: [
-    { name: 'id',            type: 'number'  },
+    { name: 'id' },
     { name: 'created_at',    type: 'date',   dateFormat: 'm/d/Y H:i:s' },
     { name: 'sticky',        type: 'boolean' },
     { name: 'summary',       type: 'string'  },
     { name: 'description',   type: 'string'  },
     { name: 'updated_at',    type: 'date',   dateFormat: 'm/d/Y H:i:s' },
     { 
-        name: 'categoryid',
+        name: 'category',
+        defaultValue: Ext.manifest.mantis.defaultTicketValues.category,
         reference: 
         {
             type: 'Ext.ux.mantis.model.Category',
@@ -50,25 +130,50 @@ Ext.define('Ext.ux.mantis.model.Ticket',
         name: 'notes' 
     },
     { 
-        name: 'priority'
+        name: 'priority',
+        defaultValue: Ext.manifest.mantis.defaultTicketValues.priority,
+        reference: 
+        {
+            type: 'Ext.ux.mantis.model.Priority',
+            role: 'priority',
+            unique: true
+        }
     },
     { 
-        name: 'project'
+        name: 'project',
+        defaultValue: Ext.manifest.mantis.project_id,
+        reference: 
+        {
+            type: 'Ext.ux.mantis.model.Project',
+            role: 'project',
+            unique: true
+        }
     },
     { 
         name: 'reporter'
     },
     { 
-        name: 'reporter'
-    },
-    { 
-        name: 'reproducibility'
+        name: 'reproducibility',
+        defaultValue: Ext.manifest.mantis.defaultTicketValues.reproducibility,
+        reference: 
+        {
+            type: 'Ext.ux.mantis.model.Reproducibility',
+            role: 'reproducibility',
+            unique: true
+        }
     },
     { 
         name: 'resolution'
     },
     { 
-        name: 'severity'
+        name: 'severity',
+        defaultValue: Ext.manifest.mantis.defaultTicketValues.severity,
+        reference: 
+        {
+            type: 'Ext.ux.mantis.model.Severity',
+            role: 'severity',
+            unique: true
+        }
     },
     { 
         name: 'status'
@@ -99,6 +204,6 @@ Ext.define('Ext.ux.mantis.model.Ticket',
         },
         depends: ['description'],
         persist: false
-    },]
+    }]
 
 });

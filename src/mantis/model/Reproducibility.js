@@ -1,11 +1,8 @@
 Ext.define('Ext.ux.mantis.model.Reproducibility', 
 {
-    extend: 'Ext.data.Model',    
+    extend: 'Ext.ux.mantis.model.Field',    
     alias: 'mantis.model.reproducibility',
     
-    fields: [
-    { name: 'id',         type: 'number' },
-    { name: 'name',       type: 'string' },
-    { name: 'label',      type: 'string' }]
+    fieldName: 'reproducibility_enum_string'
 
 });

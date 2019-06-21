@@ -5,8 +5,15 @@ Ext.define('Ext.ux.mantis.NewTicket',
     xtype: 'newticket',
     
     requires: [ 
-        'Ext.data.ArrayStore',
-        'Ext.ux.mantis.model.Ticket' 
+        'Ext.ux.mantis.model.Field',
+        'Ext.ux.mantis.model.Category',
+        'Ext.ux.mantis.model.Priority',
+        'Ext.ux.mantis.model.Project',
+        'Ext.ux.mantis.model.Reproducibility',
+        'Ext.ux.mantis.model.Severity',
+        'Ext.ux.mantis.model.Ticket',
+        'Ext.ux.mantis.store.Categories',
+        'Ext.ux.mantis.store.FieldStore'
     ],
     
     flex:1,
@@ -31,10 +38,66 @@ Ext.define('Ext.ux.mantis.NewTicket',
     
     items: [
     {
+        xtype: 'combo',
+        fieldLabel: 'Category',
+        displayField:'name',
+        valueField:'id',
+        editable: false,
+        localAfterLoad: true,
+        bind: '{record.category.id}',
+        store:
+        {
+            type: 'mantis.categories'
+        }
+    },
+    {
+        xtype: 'combo',
+        fieldLabel: 'Reproducibility',
+        displayField:'label',
+        valueField:'id',
+        editable: false,
+        localAfterLoad: true,
+        bind: '{record.reproducibility.id}',
+        store:
+        {
+            type: 'mantis.fieldstore',
+            fieldName: 'reproducibility_enum_string'
+        }
+    },
+    {
+        xtype: 'combo',
+        fieldLabel: 'Severity',
+        displayField:'label',
+        valueField:'id',
+        editable: false,
+        localAfterLoad: true,
+        bind: '{record.severity.id}',
+        store:
+        {
+            type: 'mantis.fieldstore',
+            fieldName: 'severity_enum_string'
+        }
+    },
+    {
+        xtype: 'combo',
+        fieldLabel: 'Priority',
+        displayField:'label',
+        valueField:'id',
+        editable: false,
+        localAfterLoad: true,
+        bind: '{record.priority.id}',
+        store:
+        {
+            type: 'mantis.fieldstore',
+            fieldName: 'priority_enum_string'
+        }
+    },
+    {
         xtype: 'textfield',
         fieldLabel: 'Summary',
-        tabindex: 2,
         maxlength: 64,
+        bind: '{record.summary}',
+        allowBlank: false,
         listeners:
         {
             afterrender: function(txt, eopts)
@@ -44,37 +107,72 @@ Ext.define('Ext.ux.mantis.NewTicket',
         }
     },
     {
-        xtype: 'combo',
-        fieldLabel: 'Reproducibility',
-        displayField:'name',
-        valueField:'name',
-        value: 4,
-        queryMode: 'local',
-        tabindex: 1,
-        editable: false,
-        bind: '{record.reproducibility.name}',
-        store:
-        {
-            type: 'array',
-            fields: [ 'name' ],
-            data: [
-                [['always'], ['have not tried'], ['n/a'], ['random'], ['sometimes'], ['unabled to reproduce'] ]
-            ]
-        }
+        xtype: 'textarea',
+        fieldLabel: 'Description',
+        bind: '{record.description}',
+        grow: true
     },
     {
         xtype: 'textarea',
-        fieldLabel: 'Description',
-        flex: 0.75,
-        tabindex: 4,
+        fieldLabel: 'Steps to Reproduce',
+        //bind: '{record.stepstoreproduce}',
+        grow: true
+    },
+    {
+        xtype: 'textarea',
+        fieldLabel: 'Addtl Information',
+        //bind: '{record.additionalinformation}',
         grow: true
     }],
     
     buttons: [
     {
+        text: 'Clear',
+        handler: function(btn)
+        {
+            btn.up('newticket').getViewModel().set('record', Ext.ux.mantis.model.Ticket.create());
+            //btn.up('newticket').down('textfield').focus();
+        }
+    },
+    {
         text: 'Submit',
-        tabindex: 5,
-        handler: 'submitClick'
-    }]
+        handler: function(btn)
+        {
+            var newticket = btn.up('newticket');
+            var rec = newticket.getViewModel().get('record');
+            var mask = ToolkitUtils.mask(newticket, "Submitting ticket");
+            rec.save(
+            {
+                scope: this,
+                failure: function(record, operation) 
+                {
+                    ToolkitUtils.unmask(mask);
+                    Ext.Msg.alert("Request Failed", "Failed to submit new ticket");
+                },
+                success: function(record, operation) 
+                {
+                    ToolkitUtils.unmask(mask);
+                    Ext.toast("Ticket #" + record.getId() + " submitted successfully");
+                    btn.up('newticket').getViewModel().set('record', Ext.ux.mantis.model.Ticket.create());
+                    //btn.up('newticket').down('textfield').focus();
+                }
+            });
+        }
+    }],
+
+    clearValues: function()
+    {
+        var cmps = this.query('textfield');
+        for (var c in cmps) {console.log(cmps[c].getXType());
+            if (cmps[c].getXType() == 'combobox') {
+                continue;
+            }
+            cmps[c].setValue('');
+        }
+        cmps = this.query('textarea');
+        for (var c2 in cmps) {
+            cmps[c2].setValue('');
+        }
+    }
     
 });

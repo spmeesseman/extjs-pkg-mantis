@@ -1,11 +1,8 @@
 Ext.define('Ext.ux.mantis.model.Priority', 
 {
-    extend: 'Ext.data.Model',    
+    extend: 'Ext.ux.mantis.model.Field',    
     alias: 'mantis.model.priority',
     
-    fields: [
-    { name: 'id',         type: 'number' },
-    { name: 'name',       type: 'string' },
-    { name: 'label',      type: 'string' }]
-
+    fieldName: 'priority_enum_string'
+    
 });

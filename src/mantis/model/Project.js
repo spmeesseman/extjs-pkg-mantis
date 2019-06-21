@@ -5,6 +5,11 @@ Ext.define('Ext.ux.mantis.model.Project',
     
     fields: [
     { name: 'id',         type: 'number' },
-    { name: 'name',       type: 'string' }]
+    { name: 'name',       type: 'string' }],
+
+    proxy:
+    {
+        type: 'memory'
+    }
 
 });
