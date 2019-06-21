@@ -115,13 +115,13 @@ Ext.define('Ext.ux.mantis.NewTicket',
     {
         xtype: 'textarea',
         fieldLabel: 'Steps to Reproduce',
-        //bind: '{record.stepstoreproduce}',
+        bind: '{record.steps_to_reproduce}',
         grow: true
     },
     {
         xtype: 'textarea',
         fieldLabel: 'Addtl Information',
-        //bind: '{record.additionalinformation}',
+        bind: '{record.additional_information}',
         grow: true
     }],
     

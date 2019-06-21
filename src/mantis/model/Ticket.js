@@ -106,11 +106,18 @@ Ext.define('Ext.ux.mantis.model.Ticket',
     fields: [
     { name: 'id' },
     { name: 'created_at',    type: 'date',   dateFormat: 'm/d/Y H:i:s' },
+    { name: 'updated_at',    type: 'date',   dateFormat: 'm/d/Y H:i:s' },
     { name: 'sticky',        type: 'boolean' },
     { name: 'summary',       type: 'string'  },
     { name: 'description',   type: 'string'  },
-    { name: 'updated_at',    type: 'date',   dateFormat: 'm/d/Y H:i:s' },
     { 
+        name: 'steps_to_reproduce',
+        type: 'string'  
+    },
+    { 
+        name: 'additional_information',
+        type: 'string'  
+    },{ 
         name: 'category',
         defaultValue: Ext.manifest.mantis.defaultTicketValues.category,
         reference: 
