@@ -48,6 +48,8 @@ Ext.define('Ext.ux.mantis.TicketHeader',
                 }
             }
 
+            var typeSet = false;
+
             if (record.data.custom_fields && record.data.custom_fields.length > 0) 
             {
                 for (var fld in record.data.custom_fields) 
@@ -59,12 +61,15 @@ Ext.define('Ext.ux.mantis.TicketHeader',
                     switch (record.data.custom_fields[fld].value)
                     {
                         case "bug":
+                            typeSet = true;
                             color = "#f7274d";
                             break;
                         case "feature":
+                            typeSet = true;
                             color = "#4286f4";
                             break;
                         case "task":
+                            typeSet = true;
                             color = "#309995";
                             break;
                         default:
@@ -89,6 +94,39 @@ Ext.define('Ext.ux.mantis.TicketHeader',
                         }]
                     });
                 }
+            }
+
+            if (!typeSet && record._severity)
+            {
+                var tagText = record.getSeverity().get('label');
+
+                switch (tagText)
+                {
+                    case "feature":
+                        color = "#4286f4";
+                        break;
+                    default:
+                        tagText = "bug";
+                        color = '#f7274d';
+                        break;
+                }
+                
+                panel.insert(1, 
+                {
+                    margin: '0 5 0 0',
+                    items: [
+                    {
+                        html: tagText,
+                        bodyPadding: '3 5 3 5',
+                        bodyStyle: 
+                        {
+                            'color': '#ffffff',
+                            'background': color,
+                            'text-align':'right',
+                            'border-radius': '5px'
+                        }
+                    }]
+                });
             }
         }
     },
