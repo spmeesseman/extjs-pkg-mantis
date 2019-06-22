@@ -1,5 +1,11 @@
 # EXTJS-PKG-MANTIS CHANGE LOG
 
+## Version 1.1.1 (June 21st, 2019)
+
+### Bug Fixes
+
+- if a client manifest does not contain the mantis or defaultTicketValues object yet, the application load fails when a new version has been uploaded
+
 ## Version 1.1.0 (June 21st, 2019)
 
 ### Features
