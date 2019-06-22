@@ -1,10 +1,10 @@
 Ext.define('Ext.ux.mantis.store.Tickets', 
 {
-    extend: 'Ext.data.Store',
+    extend: 'Ext.ux.mantis.store.Base',
     alias: 'store.mantis.tickets',
     
     model: 'Ext.ux.mantis.model.Ticket',
-
+    
     proxy: {
         type: 'rest',
         url: 'https://app1.development.pjats.com/projects/api/rest/issues',

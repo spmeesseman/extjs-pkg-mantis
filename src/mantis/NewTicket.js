@@ -61,7 +61,7 @@ Ext.define('Ext.ux.mantis.NewTicket',
         store:
         {
             type: 'mantis.fieldstore',
-            fieldName: 'reproducibility_enum_string'
+            model: 'Ext.ux.mantis.model.Reproducibility'
         }
     },
     {
@@ -75,7 +75,7 @@ Ext.define('Ext.ux.mantis.NewTicket',
         store:
         {
             type: 'mantis.fieldstore',
-            fieldName: 'severity_enum_string'
+            model: 'Ext.ux.mantis.model.Severity'
         }
     },
     {
@@ -89,7 +89,8 @@ Ext.define('Ext.ux.mantis.NewTicket',
         store:
         {
             type: 'mantis.fieldstore',
-            fieldName: 'priority_enum_string'
+            model: 'Ext.ux.mantis.model.Priority',
+            xtraParams: { option: 'priority_enum_string' }
         }
     },
     {

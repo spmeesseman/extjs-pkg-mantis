@@ -5,12 +5,14 @@ Ext.define('Ext.ux.mantis.model.Ticket',
     alias: 'mantis.model.ticket',
     
     requires: [
-        //'Ext.ux.mantis.Mantis',
         'Ext.ux.mantis.model.Category',
+        'Ext.ux.mantis.model.Note',
         'Ext.ux.mantis.model.Priority',
         'Ext.ux.mantis.model.Project',
         'Ext.ux.mantis.model.Reproducibility',
-        'Ext.ux.mantis.model.Severity'
+        'Ext.ux.mantis.model.Severity',
+        'Ext.ux.mantis.model.Version',
+        'Ext.ux.mantis.model.ViewState'
     ],
 
     proxy: {
@@ -47,30 +49,17 @@ Ext.define('Ext.ux.mantis.model.Ticket',
             }
         }
     },
-/*
-    constructor:function()
-    {
-        var me = this;
-        var data = arguments[0] || {};
-        var tvs = Ext.manifest.mantis.defaultTicketValues;
-            
-        if (tvs)
-        {
-            for (var f in me.fields) 
-            {
-                if (tvs[me.fields[f].name]) {
-                    //me.fields[f].defaultValue = tvs[me.fields[f].name]; //{ name: tvs[me.fields[f].name] };
-                    //me.fields[f].set['me.fields[f].name']({})
-                } 
-            }
-        }
 
-        if (arguments.length === 0)
-            this.callParent([data]);
-        else
-            this.callParent(arguments); 
+    getVersion: function()
+    {
+        var version = Ext.manifest.version;
+        if (Ext.manifest.mantis.versionIsPatchX === true) {
+            version = version.substring(0, version.lastIndexOf("."));
+            version = version + ".x";
+        }
+        return version;
     },
-*/
+
     // eslint-disable-next-line consistent-return
     save: function(options)
     {
@@ -83,19 +72,16 @@ Ext.define('Ext.ux.mantis.model.Ticket',
         if (me.phantom) {
             me.set('created_at', new Date());
             me.set('project', { id: Ext.manifest.mantis.project_id });
+            me.set('version', { name: me.getVersion() });
             if (Ext.manifest.mantis.defaultTicketValues.custom_fields) {
                 me.set('custom_fields', Ext.manifest.mantis.defaultTicketValues.custom_fields);
             }
         }
 
-        try
+        me.getProxy().setHeaders(
         {
-            me.getProxy().setHeaders(
-            {
-                Authorization: Ext.manifest.mantis.token
-            });
-        }
-        catch(e) {}
+            Authorization: Ext.manifest.mantis.token
+        });
 
         //
         // Proceed to parent save()
@@ -105,8 +91,8 @@ Ext.define('Ext.ux.mantis.model.Ticket',
 
     fields: [
     { name: 'id' },
-    { name: 'created_at',    type: 'date',   dateFormat: 'm/d/Y H:i:s' },
-    { name: 'updated_at',    type: 'date',   dateFormat: 'm/d/Y H:i:s' },
+    { name: 'created_at',    type: 'date',   dateFormat: 'Y-m-dTH:i:s-u:00' },
+    { name: 'updated_at',    type: 'date',   dateFormat: 'Y-m-dTH:i:s-u:00' },
     { name: 'sticky',        type: 'boolean' },
     { name: 'summary',       type: 'string'  },
     { name: 'description',   type: 'string'  },
@@ -128,13 +114,13 @@ Ext.define('Ext.ux.mantis.model.Ticket',
         }
     },
     { 
-        name: 'custom_fields' 
+        name: 'custom_fields' // many-to-one
     },
     { 
         name: 'handler'
     },
     { 
-        name: 'notes' 
+        name: 'notes' // many-to-one
     },
     { 
         name: 'priority',
@@ -192,10 +178,23 @@ Ext.define('Ext.ux.mantis.model.Ticket',
         name: 'target_version'
     },
     { 
-        name: 'version'
+        name: 'version',
+        defaultValue: Ext.manifest.version,
+        reference: 
+        {
+            type: 'Ext.ux.mantis.model.Version',
+            role: 'version',
+            unique: true
+        }
     },
     { 
-        name: 'view_state'
+        name: 'view_state',
+        reference: 
+        {
+            type: 'Ext.ux.mantis.model.ViewState',
+            role: 'view_state',
+            unique: true
+        }
     },
     { 
         name: 'history' 

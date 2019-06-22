@@ -4,12 +4,29 @@ Ext.define('Ext.ux.mantis.model.Project',
     alias: 'mantis.model.project',
     
     fields: [
-    { name: 'id',         type: 'number' },
-    { name: 'name',       type: 'string' }],
+    { name: 'id',          type: 'number' },
+    { name: 'name',        type: 'string' },
+    { name: 'categories',  type: 'string' },
+    { name: 'versions',    type: 'string' }],
 
-    proxy:
+    proxy: 
     {
-        type: 'memory'
+        type: 'rest',
+        url: 'https://app1.development.pjats.com/projects/api/rest/projects',
+        useDefaultXhrHeader: false,
+        params:
+        {
+            project_id: Ext.manifest.mantis.project_id
+        },
+        headers:
+        {
+            Authorization: Ext.manifest.mantis.token
+        },
+        reader:
+        {
+            type: 'json',
+            rootProperty: 'projects'
+        }
     }
 
 });

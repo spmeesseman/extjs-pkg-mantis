@@ -5,6 +5,7 @@ Ext.define('Ext.ux.mantis.TicketDetail',
     xtype: 'ticketdetail',
     
     requires: [
+        'Ext.grid.Panel',
         'Ext.ux.mantis.TicketHeader'
     ],
 
@@ -40,13 +41,90 @@ Ext.define('Ext.ux.mantis.TicketDetail',
         }
     },
     {
-        flex: 1,
         cls: 'mantis-ticket-list-ticket-description',
         margin: '10 0 0 0',
         bind: 
         {
             html: '{record.description}'
         }
+    },
+    {
+        cls: 'mantis-ticket-list-ticket-description',
+        margin: '10 0 0 0',
+        bind: 
+        {
+            hidden: '{!record.steps_to_reproduce}',
+            html: '<b>Steps to reproduce:</b><br>{record.steps_to_reproduce}'
+        }
+    },
+    {
+        cls: 'mantis-ticket-list-ticket-description',
+        margin: '10 0 0 0',
+        bind: 
+        {
+            hidden: '{!record.additional_information}',
+            html: '<b>Additional Information:</b><br>{record.additional_information}'
+        }
+    },
+    {
+        xtype: 'gridpanel',
+        title: 'Notes',
+        margin: '10 0 0 0',
+        emptyText: 'No notes to display',
+        viewModel:
+        {
+            stores:
+            {
+                publicnotes: 
+                {
+                    source: '{record.notes}',
+                    filters: [
+                        function(item) {
+                            return item.getView_state().get('label') === 'public';
+                        }
+                    ]
+                }
+            }
+        },
+        bind: 
+        {
+            store: '{publicnotes}'
+        },
+        columns: [
+        { 
+            text: 'Reporter',       
+            dataIndex: 'reporter.name',
+            flex : 0.3,
+            filter: 'string',
+            renderer: function(value, metaData, record) 
+            {  
+                if (record._reporter) {
+                    return record.getReporter().get('name');
+                }
+                return value;
+            } 
+        },
+        { 
+            text: 'Date',           
+            dataIndex: 'created_at',       
+            flex: 0.3, 
+            xtype : 'datecolumn',
+            filter: 'date',
+            renderer: function(value, metaData, record) 
+            {  
+                return Utils.formatDateAndTime(value, GEMS.user.userpref().getAt(0).get('locale'));
+            } 
+        },
+        { 
+            text: 'Note',       
+            dataIndex: 'text',
+            wrap: true,
+            flex : 1,
+            renderer: function(value, metaData, record)
+            {
+                return '<div style="white-space:normal !important;">' + value + '</div>';
+            }
+        }]
     }]
 
 });

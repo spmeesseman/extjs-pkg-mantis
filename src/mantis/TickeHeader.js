@@ -10,7 +10,7 @@ Ext.define('Ext.ux.mantis.TicketHeader',
         {
             var color = '#b295af';
             var record = panel.up().getViewModel().get('record');
-
+            
             if (record.data.tags && record.data.tags.length > 0) 
             {
                 for (var tag in record.data.tags) 
@@ -52,6 +52,8 @@ Ext.define('Ext.ux.mantis.TicketHeader',
 
             if (record.data.custom_fields && record.data.custom_fields.length > 0) 
             {
+                var count = 0;
+
                 for (var fld in record.data.custom_fields) 
                 {
                     if (!record.data.custom_fields[fld].value) {
@@ -66,14 +68,28 @@ Ext.define('Ext.ux.mantis.TicketHeader',
                             break;
                         case "feature":
                             typeSet = true;
-                            color = "#4286f4";
+                            color = "#03b3c6";
                             break;
                         case "task":
                             typeSet = true;
                             color = "#309995";
                             break;
                         default:
-                            color = '#a06ac4';
+                            switch (count)
+                            {
+                                case 0:
+                                    color = '#a06ac4';
+                                    break;
+                                case 1:
+                                    color = '#cf9eef';
+                                    break;
+                                case 2:
+                                    color = '#c887f2';
+                                    break;
+                                default:
+                                    color = "#b17ed3";
+                                    break;
+                            }
                             break;
                     }
 
@@ -93,6 +109,8 @@ Ext.define('Ext.ux.mantis.TicketHeader',
                             }
                         }]
                     });
+
+                    count++;
                 }
             }
 
@@ -103,7 +121,7 @@ Ext.define('Ext.ux.mantis.TicketHeader',
                 switch (tagText)
                 {
                     case "feature":
-                        color = "#4286f4";
+                        color = "#03b3c6";
                         break;
                     default:
                         tagText = "bug";

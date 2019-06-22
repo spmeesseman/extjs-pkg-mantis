@@ -14,11 +14,18 @@ Ext.define('Ext.ux.mantis.TicketList',
     flex: 1,
     scrollable: true,
     bodyPadding: '5 5 5 5',
+    reference: 'ticketList',
 
     config:
     {
         store: null,
-        params: {}
+        params: {},
+        myTicketList: false
+    },
+
+    publishes:
+    {
+        myTicketList: true,
     },
 
     style:
@@ -37,9 +44,13 @@ Ext.define('Ext.ux.mantis.TicketList',
     dockedItems: [
     {
         xtype: 'pagingtoolbar',
-        pageSize: 25,
         dock: 'bottom',
-        displayInfo: true
+        displayInfo: true,
+        bind:
+        {
+            disabled: '{ticketList.myTicketList}',
+            hidden: '{ticketList.myTicketList}'
+        }
     }],
 
     defaults:
@@ -86,10 +97,46 @@ Ext.define('Ext.ux.mantis.TicketList',
     {
         var me = this;
         var mask = ToolkitUtils.mask(me, "Retrieving tickets");
-        me.getTicketCount().then((count) =>
+
+        if (!me.getMyTicketList())
         {
-            store.getTotalCount = function() { return count; };
-            store.getProxy().setExtraParams(Ext.merge({ project_id: Ext.manifest.mantis.project_id }, me.getParams() ? me.getParams() : {}));
+            store.getTotalCount = function() { return 0; };
+            me.getTicketCount().then((count) =>
+            {
+                store.getTotalCount = function() { return count; };
+                store.load(
+                {
+                    callback: function(records, options, success) 
+                    {
+                        ToolkitUtils.unmask(mask);
+                        me.load = false;
+                        me.removeAll();
+                        if (!success) {
+                            Utils.alertError('Could not execute Mantis Rest API');
+                            return;
+                        }
+                        me.suspendLayout = true;
+                        for (var t in records) 
+                        {
+                            try {
+                                me.add(Ext.create('Ext.ux.mantis.Ticket',
+                                {
+                                    viewModel: { data: { record: records[t] } }
+                                }));
+                            }
+                            catch(e) {
+                                console.error(e);
+                            }
+                        }
+                        me.suspendLayout = false;
+                        me.updateLayout();
+                    }
+                });
+            }, (e) => { ToolkitUtils.unmask(mask); me.load = false; Utils.alertError(e); });
+        }
+        else
+        {
+            store.setPageSize(250);
             store.load(
             {
                 callback: function(records, options, success) 
@@ -101,21 +148,28 @@ Ext.define('Ext.ux.mantis.TicketList',
                         Utils.alertError('Could not execute Mantis Rest API');
                         return;
                     }
+                    me.suspendLayout = true;
                     for (var t in records) 
                     {
-                        try {
-                            me.add(Ext.create('Ext.ux.mantis.Ticket',
-                            {
-                                viewModel: { data: { record: records[t] } }
-                            }));
-                        }
-                        catch(e) {
-                            console.error(e);
+                        if (records[t].get('custom_fields')[1].value == Ext.manifest.mantis.defaultTicketValues.custom_fields[0].value &&
+                            records[t].get('custom_fields')[0].value == Ext.manifest.mantis.defaultTicketValues.custom_fields[1].value)
+                        {
+                            try {
+                                me.add(Ext.create('Ext.ux.mantis.Ticket',
+                                {
+                                    viewModel: { data: { record: records[t] } }
+                                }));
+                            }
+                            catch(e) {
+                                console.error(e);
+                            }
                         }
                     }
+                    me.suspendLayout = false;
+                    me.updateLayout();
                 }
             });
-        }, (e) => { ToolkitUtils.unmask(mask); me.load = false; Utils.alertError(e); });
+        }
     },
 
     getTicketStore: function()
@@ -137,12 +191,13 @@ Ext.define('Ext.ux.mantis.TicketList',
         }
         
         var store = Ext.create('Ext.ux.mantis.store.Tickets');
-
+        
         //
         // If the token is specified at runtime, we need to reset proxy authorization
         //
         var proxy = store.getProxy();
         proxy.setHeaders({ Authorization: Ext.manifest.mantis.token });
+        proxy.setExtraParams(Ext.merge({ project_id: Ext.manifest.mantis.project_id }, me.getParams() ? me.getParams() : {}));
 
         return store;
     },
@@ -169,8 +224,6 @@ Ext.define('Ext.ux.mantis.TicketList',
         var store = me.getTicketStore();
 
         store.setPageSize(250);
-        store.getProxy().setExtraParams(Ext.merge({ project_id: Ext.manifest.mantis.project_id }, me.getParams() ? me.getParams() : {}));
-        
         store.load(
         {
             scope: this,

@@ -6,6 +6,6 @@ Ext.define('Ext.ux.mantis.model.ViewState',
     fields: [
     { name: 'id',         type: 'number' },
     { name: 'name',       type: 'string' },
-    { name: 'label',      type: 'string' }]
+    { name: 'label',      type: 'string' }] // enum - public, private
 
 });

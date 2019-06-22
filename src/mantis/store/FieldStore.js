@@ -1,44 +1,11 @@
 
 Ext.define('Ext.ux.mantis.store.FieldStore', 
 {
-    extend: 'Ext.data.Store',
+    extend: 'Ext.ux.mantis.store.Base',
     alias: 'store.mantis.fieldstore',
 
     model: 'Ext.ux.mantis.model.Field',
-
-    autoLoad: true,
-    fieldName: null,
-
-    listeners:
-    {
-        // eslint-disable-next-line consistent-return
-        beforeload: function(store, operation, eopts)
-        {
-            if (!Ext.manifest.mantis.token) {
-                return false;
-            }
-
-            if (!store.fieldName) { //(!store.getModel() || !store.getModel().fieldName) {
-                return false;
-            }
-            
-            //
-            // Set authorization header and config field name in proxy
-            //
-            try
-            {
-                var proxy = store.getProxy();
-
-                proxy.setHeaders(
-                {
-                    Authorization: Ext.manifest.mantis.token
-                });
-                
-                proxy.setExtraParams({ option: store.fieldName });
-            }
-            catch(e) {}
-        }
-    },
+    xtraParams: { option: '' },
 
     proxy: {
         type: 'rest',
@@ -52,7 +19,10 @@ Ext.define('Ext.ux.mantis.store.FieldStore',
         {
             type: 'json',
             rootProperty: function(data) {
-                return data.configs[0].value;
+                if (data.configs && data.configs.length > 0) {
+                    return data.configs[0].value;
+                }
+                return data.configs;
             }
         }
     }

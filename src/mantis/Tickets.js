@@ -29,7 +29,26 @@ Ext.define('Ext.ux.mantis.Tickets',
         }]
     },
     {
-        title: 'My Open Tickets',
+        title: 'My Tickets',
+        iconCls: 'far fa-bars',
+        layout: 
+        {
+            type: 'vbox',
+            align : 'stretch',
+            pack  : 'start'
+        },
+        items: [
+        {
+            xtype: 'ticketlist',
+            myTicketList: true,
+            params: {
+                filter_id: 'reported'
+            }
+        }]
+    },
+    {
+        title: 'Location Tickets',
+        border: false,
         iconCls: 'far fa-bars',
         layout: 
         {
@@ -49,6 +68,10 @@ Ext.define('Ext.ux.mantis.Tickets',
         title: 'All Tickets',
         border: false,
         iconCls: 'far fa-bars',
+        tabConfig:
+        {
+            //hidden: '{facility.clientid!=\'300\'&&facility.entnum!=\'1\'}'
+        },
         layout: 
         {
             type: 'vbox',
