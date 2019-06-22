@@ -1,5 +1,16 @@
 # EXTJS-PKG-MANTIS CHANGE LOG
 
+## Version 1.1.0 (June 21st, 2019)
+
+### Features
+
+- add ability to submit new ticket.
+
+### Minor Features
+
+- add additional_information and steps_to_reproduce bindings to new ticket forms and model.
+- display bug/feature tag in header depending on severity level
+
 ## Version 1.0.2 (June 20th, 2019)
 
 - requests to the mantis server are failing when the request origin is not localhost
