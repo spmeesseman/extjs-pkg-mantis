@@ -119,7 +119,7 @@ Ext.define('Ext.ux.mantis.model.Ticket',
         type: 'string'  
     },{ 
         name: 'category',
-        defaultValue: Ext.manifest.mantis.defaultTicketValues.category,
+        defaultValue: Ext.manifest.mantis && Ext.manifest.mantis.defaultTicketValues ? Ext.manifest.mantis.defaultTicketValues.category : 1,
         reference: 
         {
             type: 'Ext.ux.mantis.model.Category',
@@ -138,7 +138,7 @@ Ext.define('Ext.ux.mantis.model.Ticket',
     },
     { 
         name: 'priority',
-        defaultValue: Ext.manifest.mantis.defaultTicketValues.priority,
+        defaultValue: Ext.manifest.mantis && Ext.manifest.mantis.defaultTicketValues ? Ext.manifest.mantis.defaultTicketValues.priority : 30,
         reference: 
         {
             type: 'Ext.ux.mantis.model.Priority',
@@ -161,7 +161,7 @@ Ext.define('Ext.ux.mantis.model.Ticket',
     },
     { 
         name: 'reproducibility',
-        defaultValue: Ext.manifest.mantis.defaultTicketValues.reproducibility,
+        defaultValue: Ext.manifest.mantis && Ext.manifest.mantis.defaultTicketValues ? Ext.manifest.mantis.defaultTicketValues.reproducibility : 70,
         reference: 
         {
             type: 'Ext.ux.mantis.model.Reproducibility',
@@ -174,7 +174,7 @@ Ext.define('Ext.ux.mantis.model.Ticket',
     },
     { 
         name: 'severity',
-        defaultValue: Ext.manifest.mantis.defaultTicketValues.severity,
+        defaultValue: Ext.manifest.mantis && Ext.manifest.mantis.defaultTicketValues ? Ext.manifest.mantis.defaultTicketValues.severity : 50,
         reference: 
         {
             type: 'Ext.ux.mantis.model.Severity',
