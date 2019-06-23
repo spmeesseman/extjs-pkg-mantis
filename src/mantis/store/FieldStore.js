@@ -9,7 +9,7 @@ Ext.define('Ext.ux.mantis.store.FieldStore',
 
     proxy: {
         type: 'rest',
-        url: 'https://app1.development.pjats.com/projects/api/rest/config',
+        url: Ext.manifest.mantis.location ? Ext.manifest.mantis.location + 'api/rest/config' : '',
         useDefaultXhrHeader: false,
         headers:
         {

@@ -14,8 +14,18 @@ Ext.define('Ext.ux.mantis.store.Base',
         // eslint-disable-next-line consistent-return
         beforeload: function(store, operation, eopts)
         {
-            if (!Ext.manifest.mantis.token || !Ext.manifest.mantis.project_id) {
-                Ext.Msg.alert("Mantis token and/or project_id is not set");
+            if (!Ext.manifest.mantis.token) {
+                Ext.Msg.alert("Mantis token is not set");
+                return false;
+            }
+
+            if (!Ext.manifest.mantis.project_id) {
+                Ext.Msg.alert("Mantis project_id is not set");
+                return false;
+            }
+
+            if (!Ext.manifest.mantis.location) {
+                Ext.Msg.alert("Mantis location is not set");
                 return false;
             }
 

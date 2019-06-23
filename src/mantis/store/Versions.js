@@ -9,7 +9,7 @@ Ext.define('Ext.ux.mantis.store.Versions',
     proxy: 
     {
         type: 'rest',
-        url: 'https://app1.development.pjats.com/projects/api/rest/projects',
+        url: Ext.manifest.mantis.location ? Ext.manifest.mantis.location + 'api/rest/projects' : '',
         useDefaultXhrHeader: false,
         params:
         {
