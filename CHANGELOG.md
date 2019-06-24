@@ -1,5 +1,15 @@
 # EXTJS-PKG-MANTIS CHANGE LOG
 
+## Version 1.2.0 (June 23rd, 2019)
+
+### Features
+
+- Add support for displaying notes in ticket detail
+
+### Bug Fixes
+
+- use defined mantis base url in app.json for api endpoints
+
 ## Version 1.1.1 (June 21st, 2019)
 
 ### Bug Fixes
