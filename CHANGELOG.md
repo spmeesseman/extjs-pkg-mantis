@@ -1,5 +1,11 @@
 # EXTJS-PKG-MANTIS CHANGE LOG
 
+## Version 1.2.1 (June 23rd, 2019)
+
+### Bug Fixes
+
+- modern toolkit build fails in 1.2.0
+
 ## Version 1.2.0 (June 23rd, 2019)
 
 ### Features
