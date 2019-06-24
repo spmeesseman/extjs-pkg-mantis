@@ -5,7 +5,7 @@ Ext.define('Ext.ux.mantis.TicketDetail',
     xtype: 'ticketdetail',
     
     requires: [
-        'Ext.grid.Panel',
+        Ext.platformTags.desktop ? 'Ext.grid.Panel' : 'Ext.grid.Grid',
         'Ext.ux.mantis.TicketHeader'
     ],
 
@@ -67,7 +67,7 @@ Ext.define('Ext.ux.mantis.TicketDetail',
         }
     },
     {
-        xtype: 'gridpanel',
+        xtype: 'grid',
         title: 'Notes',
         margin: '10 0 0 0',
         emptyText: 'No notes to display',
