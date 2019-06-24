@@ -15,17 +15,17 @@ Ext.define('Ext.ux.mantis.store.Base',
         beforeload: function(store, operation, eopts)
         {
             if (!Ext.manifest.mantis.token) {
-                Ext.Msg.alert("Mantis token is not set");
+                Ext.Msg.alert("Error", "Mantis token is not set in Ext manifest");
                 return false;
             }
 
             if (!Ext.manifest.mantis.project_id) {
-                Ext.Msg.alert("Mantis project_id is not set");
+                Ext.Msg.alert("Error", "Mantis project_id is not set in Ext manifest");
                 return false;
             }
 
             if (!Ext.manifest.mantis.location) {
-                Ext.Msg.alert("Mantis location is not set");
+                Ext.Msg.alert("Error", "Mantis location is not set in Ext manifest");
                 return false;
             }
 
