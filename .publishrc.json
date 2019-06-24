@@ -40,20 +40,20 @@
     "writeLog":          "N",
     "xRuns": [
     {
-        "repoType":      "svn",
-        "repo":          "https://svn.development.pjats.com/pja/extjs-pkg-mantis/trunk",
-        "homePage":      "https://npm.development.pjats.com/-/web/detail/@perryjohnson/extjs-pkg-mantis",
-        "bugs":          "https://app1.development.pjats.com/projects",
-        "npmRegistry":   "https://npm.development.pjats.com",
-        "textEditor":    "",
-        "npmScope":      "@perryjohnson",
-        "githubRelease": "N",
-        "distRelease":   "Y",
+        "repoType":          "svn",
+        "repo":              "https://svn.development.pjats.com/pja/extjs-pkg-mantis/trunk",
+        "homePage":          "https://npm.development.pjats.com/-/web/detail/@perryjohnson/extjs-pkg-mantis",
+        "bugs":              "https://app1.development.pjats.com/projects",
+        "npmRegistry":       "https://npm.development.pjats.com",
+        "textEditor":        "",
+        "npmScope":          "@perryjohnson",
+        "githubRelease":     "N",
+        "distRelease":       "Y",
         "distReleasePath":   "\\\\192.168.68.120\\d$\\softwareimages",
         "distDocPath":       "\\\\pjainc.pjvista.com@SSL\\DavWWWRoot\\Shared Documents\\Tech Support\\Application Installation and Configuration",
         "emailNotification": "Y",
         "emailServer":       "10.0.7.50",
-        "emailRecip":        "productrelease@pjats.com",
+        "emailRecip":        "smeesseman@pjats.com",
         "emailSender":       "productbuild@pjats.com"
     }]
 }

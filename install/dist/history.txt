@@ -127,3 +127,73 @@ June 21st, 2019
     mantis.defaultTicketValues object yet, the application load fails when a 
     new version has been uploaded.
 
+
+Version 1.2.0
+June 23rd, 2019
+-------------------------------------------------------------------------------
+********************************************************************************
+***                                                                            *
+*** Verify that the following requirements have been satisfied:                *
+***                                                                            *
+*** Requirements:                                                              *
+*** -------------                                                              *
+***                                                                            *
+***    1.  Operating System            : Windows 7+                            * 
+***                                                                            *
+***    2.  CPU                         : 1.0+ GHz                              *
+***                                                                            *
+***    3.  RAM                         : 128 MB                                *
+***                                                                            *
+***    4.  ExtJS Core                  : 6.7+                                  *
+***                                                                            *
+********************************************************************************
+
+1.  Feature
+
+    Add support for displaying notes in ticket detail.
+
+2.  Feature
+
+    Use defined mantis base url in the ExtJs manifest for api endpoints.
+
+    The definition is defined within the mantic object:
+
+        "mantis":
+        {
+            "location": "https://my.domain.com/mantisbt/",
+            ....
+        }
+
+    All mantis manifest config parameters are listed below for reference:
+
+    "mantis":
+    {
+        "project_id": 1,
+        "token": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "versionIsPatchX": false,
+        "location": "https://my.domain.com/mantisbt/",
+        "defaultTicketValues":
+        {
+            "priority": 30,
+            "severity": 50,
+            "reproducibility": 70,
+            "category": 1,
+            "custom_fields": [
+            {
+                "field": 
+                { 
+                    "name": "Custom Field 1" 
+                },
+                "value": "Custom Value 1"
+            },
+            {
+                "isMyTicketsFilter": true,
+                "field": 
+                { 
+                    "name": "Custom Field 2" 
+                },
+                "value": "Custom Value 2"
+            }]
+        }
+    }
+
