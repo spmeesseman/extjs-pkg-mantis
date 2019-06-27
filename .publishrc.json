@@ -53,7 +53,7 @@
         "distDocPath":       "\\\\pjainc.pjvista.com@SSL\\DavWWWRoot\\Shared Documents\\Tech Support\\Application Installation and Configuration",
         "emailNotification": "Y",
         "emailServer":       "10.0.7.50",
-        "emailRecip":        "smeesseman@pjats.com",
+        "emailRecip":        "productrelease@pjats.com",
         "emailSender":       "productbuild@pjats.com"
     }]
 }
