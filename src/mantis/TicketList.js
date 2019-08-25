@@ -23,11 +23,6 @@ Ext.define('Ext.ux.mantis.TicketList',
         myTicketList: false
     },
 
-    publishes:
-    {
-        myTicketList: true,
-    },
-
     style:
     {
         'border': '0px solid !important',
@@ -45,12 +40,7 @@ Ext.define('Ext.ux.mantis.TicketList',
     {
         xtype: 'pagingtoolbar',
         dock: 'bottom',
-        displayInfo: true,
-        bind:
-        {
-            disabled: '{ticketList.myTicketList}',
-            hidden: '{ticketList.myTicketList}'
-        }
+        displayInfo: true
     }],
 
     defaults:
@@ -98,45 +88,17 @@ Ext.define('Ext.ux.mantis.TicketList',
         var me = this;
         var mask = ToolkitUtils.mask(me, "Retrieving tickets");
 
-        if (!me.getMyTicketList())
+        store.getTotalCount = function() { return 0; };
+        me.getTicketCount().then((count) =>
         {
-            store.getTotalCount = function() { return 0; };
-            me.getTicketCount().then((count) =>
-            {
-                store.getTotalCount = function() { return count; };
-                store.load(
-                {
-                    callback: function(records, options, success) 
-                    {
-                        ToolkitUtils.unmask(mask);
-                        me.load = false;
-                        me.removeAll();
-                        if (!success) {
-                            Utils.alertError('Could not execute Mantis Rest API');
-                            return;
-                        }
-                        me.suspendLayout = true;
-                        for (var t in records) 
-                        {
-                            try {
-                                me.add(Ext.create('Ext.ux.mantis.Ticket',
-                                {
-                                    viewModel: { data: { record: records[t] } }
-                                }));
-                            }
-                            catch(e) {
-                                console.error(e);
-                            }
-                        }
-                        me.suspendLayout = false;
-                        me.updateLayout();
-                    }
-                });
-            }, (e) => { ToolkitUtils.unmask(mask); me.load = false; Utils.alertError(e); });
-        }
-        else
-        {
-            store.setPageSize(250);
+            if (count == 0) {
+                ToolkitUtils.unmask(mask);
+                me.load = false;
+                me.removeAll();
+                return;
+            }
+
+            store.getTotalCount = function() { return count; };
             store.load(
             {
                 callback: function(records, options, success) 
@@ -151,25 +113,21 @@ Ext.define('Ext.ux.mantis.TicketList',
                     me.suspendLayout = true;
                     for (var t in records) 
                     {
-                        if (records[t].get('custom_fields')[1].value == Ext.manifest.mantis.defaultTicketValues.custom_fields[0].value &&
-                            records[t].get('custom_fields')[0].value == Ext.manifest.mantis.defaultTicketValues.custom_fields[1].value)
-                        {
-                            try {
-                                me.add(Ext.create('Ext.ux.mantis.Ticket',
-                                {
-                                    viewModel: { data: { record: records[t] } }
-                                }));
-                            }
-                            catch(e) {
-                                console.error(e);
-                            }
+                        try {
+                            me.add(Ext.create('Ext.ux.mantis.Ticket',
+                            {
+                                viewModel: { data: { record: records[t] } }
+                            }));
+                        }
+                        catch(e) {
+                            console.error(e);
                         }
                     }
                     me.suspendLayout = false;
                     me.updateLayout();
                 }
             });
-        }
+        }, (e) => { ToolkitUtils.unmask(mask); me.load = false; Utils.alertError(e); });
     },
 
     getTicketStore: function()
@@ -221,19 +179,38 @@ Ext.define('Ext.ux.mantis.TicketList',
             return Ext.Deferred.reject("Invalid project");
         }
 
-        var store = me.getTicketStore();
-
-        store.setPageSize(250);
-        store.load(
+        Ext.Ajax.request(
         {
             scope: this,
-            callback: function(records, options, success) 
+            method: 'GET',
+            url: Ext.manifest.mantis.location + 'plugins/ApiExtend/api/issues/count/' + Ext.manifest.mantis.project_name,
+            headers: { Authorization: Ext.manifest.mantis.token },
+            failure: function(response, options)
             {
-                if (!success) {
-                    deferred.reject('Could not execute Mantis Rest API for getTicketCount()');
+                deferred.reject('Could not execute Mantis Rest API for getTicketCount()');
+            },
+            success: function(response, options)
+            {
+                var jso;
+                try {
+                    jso = Ext.util.JSON.decode(response.responseText);
+                } 
+                catch(e) {
+                    deferred.reject('Exception thrown executing Mantis Rest API for getTicketCount()');
+                    return;
                 }
-                deferred.resolve(records ? records.length : 0);
-            }
+                
+                if (!jso.count && jso.count !== 0) {
+                    deferred.reject("Could not retrieve ticket count.<br><br>" + jso.message);                       
+                    return;
+                }
+
+                //
+                // Success
+                //
+                deferred.resolve(jso.count);
+            },
+            params: Ext.merge({ project_id: Ext.manifest.mantis.project_id, hide_status:-2 }, me.getParams() ? me.getParams() : {})
         });
 
         return deferred.promise;

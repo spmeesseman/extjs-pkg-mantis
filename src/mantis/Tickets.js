@@ -40,9 +40,63 @@ Ext.define('Ext.ux.mantis.Tickets',
         items: [
         {
             xtype: 'ticketlist',
-            myTicketList: true,
             params: {
-                filter_id: 'reported'
+                type: 'all'
+            },
+            listeners:
+            {
+                beforerender: function(tl, eopts)
+                {
+                    tl.params.filters = Ext.util.JSON.encode(Ext.manifest.mantis.myTicketFilters);
+                }
+            }
+        }]
+    },
+    {
+        title: 'My Open Tickets',
+        iconCls: 'far fa-bars',
+        layout: 
+        {
+            type: 'vbox',
+            align : 'stretch',
+            pack  : 'start'
+        },
+        items: [
+        {
+            xtype: 'ticketlist',
+            params: {
+                type: 'open'
+            },
+            listeners:
+            {
+                beforerender: function(tl, eopts)
+                {
+                    tl.params.filters = Ext.util.JSON.encode(Ext.manifest.mantis.myTicketFilters);
+                }
+            }
+        }]
+    },
+    {
+        title: 'My Closed Tickets',
+        iconCls: 'far fa-bars',
+        layout: 
+        {
+            type: 'vbox',
+            align : 'stretch',
+            pack  : 'start'
+        },
+        items: [
+        {
+            xtype: 'ticketlist',
+            params: {
+                type: 'closed'
+            },
+            listeners:
+            {
+                beforerender: function(tl, eopts)
+                {
+                    tl.params.filters = Ext.util.JSON.encode(Ext.manifest.mantis.myTicketFilters);
+                }
             }
         }]
     },
@@ -60,27 +114,15 @@ Ext.define('Ext.ux.mantis.Tickets',
         {
             xtype: 'ticketlist',
             params: {
-                filter_id: 'reported'
+                type: 'all'
+            },
+            listeners:
+            {
+                beforerender: function(tl, eopts)
+                {
+                    tl.params.filters = Ext.util.JSON.encode(Ext.manifest.mantis.locationTicketFilters);
+                }
             }
-        }]
-    },
-    {
-        title: 'All Tickets',
-        border: false,
-        iconCls: 'far fa-bars',
-        tabConfig:
-        {
-            //hidden: '{facility.clientid!=\'300\'&&facility.entnum!=\'1\'}'
-        },
-        layout: 
-        {
-            type: 'vbox',
-            align : 'stretch',
-            pack  : 'start'
-        },
-        items: [
-        {
-            xtype: 'ticketlist'
         }]
     }]
     

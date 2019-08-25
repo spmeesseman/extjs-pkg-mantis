@@ -7,7 +7,7 @@ Ext.define('Ext.ux.mantis.store.Tickets',
     
     proxy: {
         type: 'rest',
-        url: Ext.manifest.mantis.location ? Ext.manifest.mantis.location + 'api/rest/issues' : '',
+        url: Ext.manifest.mantis.location ? Ext.manifest.mantis.location + 'plugins/ApiExtend/api/issues/' + Ext.manifest.mantis.project_name : '',
         useDefaultXhrHeader: false,
         limitParam: 'page_size',
         headers:
