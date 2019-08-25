@@ -1,5 +1,17 @@
 # EXTJS-PKG-MANTIS CHANGE LOG
 
+## Version 1.3.0 (August 25th, 2019)
+
+### Build System
+
+- **App Publisher Config:** fix email 'to' config field
+
+### Features
+
+- add support for applying configurable filters to the list of tickets requested.
+
+	See the readme file for details.
+
 ## Version 1.2.1 (June 23rd, 2019)
 
 ### Bug Fixes
