@@ -31,7 +31,7 @@
     "mantisbtUrl":       "https://app1.development.pjats.com/projects",
     "mantisbtAssets": [
         "doc\\history.txt|History File",
-        "install\\dist\\extjs-pkg-plyr.tgz|NPM Tarball"
+        "install\\dist\\extjs-pkg-mantis.tgz|NPM Tarball"
     ],
     "npmPackDist":       "Y",
     "npmRelease":        "Y",
@@ -64,9 +64,6 @@
         "npmRegistry":       "https://npm.development.pjats.com",
         "npmScope":          "@perryjohnson",
         "githubRelease":     "N",
-        "distRelease":       "Y",
-        "distReleasePath":   "\\\\192.168.68.120\\d$\\softwareimages",
-        "distDocPath":       "\\\\pjainc.pjvista.com@SSL\\DavWWWRoot\\Shared Documents\\Tech Support\\Application Installation and Configuration",
         "emailNotification": "Y",
         "mantisbtRelease":   "Y",
         "textEditor":        ""
