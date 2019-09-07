@@ -2,7 +2,7 @@
     "projectName":       "extjs-pkg-mantis",
     "bugs":              "",
     "buildCommand":      "",
-    "changelogFile":     "CHANGELOG.md",
+    "changelogFile":     "",
     "deployCommand":     "",
     "emailNotification": "N",
     "emailServer":       "10.0.7.50",
