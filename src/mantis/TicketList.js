@@ -89,7 +89,7 @@ Ext.define('Ext.ux.mantis.TicketList',
         var mask = ToolkitUtils.mask(me, "Retrieving tickets");
 
         store.getTotalCount = function() { return 0; };
-        me.getTicketCount().then((count) =>
+        me.getTicketCount().then(function(count)
         {
             if (count == 0) {
                 ToolkitUtils.unmask(mask);
@@ -127,7 +127,7 @@ Ext.define('Ext.ux.mantis.TicketList',
                     me.updateLayout();
                 }
             });
-        }, (e) => { ToolkitUtils.unmask(mask); me.load = false; Utils.alertError(e); });
+        }, function(e) { ToolkitUtils.unmask(mask); me.load = false; Utils.alertError(e); });
     },
 
     getTicketStore: function()
