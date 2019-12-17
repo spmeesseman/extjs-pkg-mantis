@@ -1,19 +1,18 @@
 {
-    "name": "@spmeesseman/extjs-pkg-mantis",
+    "name": "@perryjohnson/extjs-pkg-mantis",
     "description": "ExtJS Package Wrapper for Mantis BugTracker",
     "version": "1.4.0",
     "license": "MIT",
     "author": {
-        "name": "Scott Meesseman",
-        "email": "spmeesseman@gmail.com"
-    },
-    "homepage": "https://github.com/spmeesseman/extjs-pkg-mantis",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/spmeesseman/pja/extjs-pkg-mantis.git"
+        "name": "Scott Meesseman"
     },
     "bugs": {
-        "url": "https://github.com/spmeesseman/extjs-pkg-mantis/issues"
+        "url": "https://app1.development.pjats.com/projects/set_project.php?project=extjs-pkg-mantis&make_default=no&ref=bug_report_page.php"
+    },
+    "homepage": "https://app1.development.pjats.com/svn/web/listing.php?repname=pja&path=%2Fextjs-pkg-mantis%2Ftrunk%2F",
+    "repository": {
+        "type": "svn",
+        "url": "https://svn.development.pjats.com/pja/extjs-pkg-mantis/trunk"
     },
     "devDependencies": {},
     "displayName": "ExtJS Package Wrapper for Mantis",
