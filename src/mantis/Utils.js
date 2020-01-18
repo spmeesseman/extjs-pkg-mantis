@@ -151,10 +151,10 @@ Ext.define('Ext.ux.mantis.Utils',
                     reject('');
                 }
             })
-            .catch(function()
+            .catch(function(obj)
             {
                 Utils.alertError("Error retrieving changelog");
-            reject('');
+                reject(obj);
             });
         });
     }

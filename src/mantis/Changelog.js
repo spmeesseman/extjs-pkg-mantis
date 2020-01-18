@@ -1,7 +1,7 @@
 
 Ext.define('Ext.ux.mantis.Changelog', 
 {
-    extend: 'Ext.Panel',
+    extend: 'Ext.panel.Panel',
     xtype: 'mantischangelog',
     
     require: [
@@ -12,12 +12,14 @@ Ext.define('Ext.ux.mantis.Changelog',
     	
     config:
     {
-        closeFn: false
+        closeFn: false,
+        version: undefined
     },
 
     publishes:
     {
-        closeFn: true
+        closeFn: true,
+        version: true
     },
 
     layout: 
@@ -31,7 +33,6 @@ Ext.define('Ext.ux.mantis.Changelog',
     {
         data:
         {
-            version: Ext.manifest.version,
             versions: undefined
         },
 
@@ -68,7 +69,7 @@ Ext.define('Ext.ux.mantis.Changelog',
                     var versions = get('versions');
                     if (versions && versions.length > 0)
                     {
-                        return versions[versions.length - 1] === get('version');
+                        return versions[versions.length - 1] === get('mantischangelog.version');
                     }
                     return true;
                 }
@@ -81,7 +82,7 @@ Ext.define('Ext.ux.mantis.Changelog',
                     var versions = get('versions');
                     if (versions && versions.length > 0)
                     {
-                        return versions[0] === get('version');
+                        return versions[0] === get('mantischangelog.version');
                     }
                     return true;
                 }
@@ -99,7 +100,9 @@ Ext.define('Ext.ux.mantis.Changelog',
             //
             // Default to current version
             //
-            vm.set('version', Ext.manifest.version); 
+            if (!panel.getVersion()) {
+                panel.setVersion(Ext.manifest.version); 
+            }
 
             //
             // Build utility version cache first
@@ -117,10 +120,10 @@ Ext.define('Ext.ux.mantis.Changelog',
             {
                 ToolkitUtils.unmask(mask);
             })
-            .catch(function()
+            .catch(function(obj)
             {
                 ToolkitUtils.unmask(mask);
-                Utils.alertError("Error retrieving changelog");
+                Utils.alertError("Error retrieving changelog<br><br>" + obj.reason);
             });
         }
     },
@@ -147,7 +150,7 @@ Ext.define('Ext.ux.mantis.Changelog',
         queryMode: 'local',
         bind:
         {
-            value: '{version}',
+            value: '{mantischangelog.version}',
             store: '{versionStore}'
         },
         listeners:
@@ -168,8 +171,7 @@ Ext.define('Ext.ux.mantis.Changelog',
         handler: function(btn, eopts)
         {
             var panel = btn.up('mantischangelog');
-            var vm = panel.getViewModel();
-            vm.set('version', MantisUtils.getVersionPrevious(vm.get('version')));
+            panel.setVersion(MantisUtils.getVersionPrevious(panel.getVersion()));
             panel.getChangeLog();
         }
     },
@@ -184,8 +186,7 @@ Ext.define('Ext.ux.mantis.Changelog',
         handler: function(btn, eopts)
         {
             var panel = btn.up('mantischangelog');
-            var vm = panel.getViewModel();
-            vm.set('version', MantisUtils.getVersionNext(vm.get('version')));
+            panel.setVersion(MantisUtils.getVersionNext(panel.getVersion()));
             panel.getChangeLog();
         }
     },
@@ -208,18 +209,18 @@ Ext.define('Ext.ux.mantis.Changelog',
         //
         // Get changelog for the version set in the view model
         //
-        var vm = this.getViewModel();
+        var me = this;
         return new Ext.Promise(function(resolve, reject)
         {
-            MantisUtils.getChangeLog(vm.get('version'))
+            MantisUtils.getChangeLog(me.getVersion())
             .then(function(content)
             {
-                vm.set('content', content);
+                me.getViewModel().set('content', content);
                 resolve();
             })
-            .catch(function()
+            .catch(function(obj)
             {
-                reject();
+                reject(obj);
             });
         });
     }
