@@ -323,3 +323,41 @@ December 16th, 2019
             xtype: 'mantischangelog'
         }]
 
+
+Version 1.4.1
+January 18th, 2020
+-------------------------------------------------------------------------------
+********************************************************************************
+***                                                                            *
+*** Verify that the following requirements have been satisfied:                *
+***                                                                            *
+*** Requirements:                                                              *
+*** -------------                                                              *
+***                                                                            *
+***    1.  Operating System            : Windows 7+                            * 
+***                                                                            *
+***    2.  CPU                         : 1.0+ GHz                              *
+***                                                                            *
+***    3.  RAM                         : 128 MB                                *
+***                                                                            *
+***    4.  ExtJS Core                  : 6.7+                                  *
+***                                                                            *
+********************************************************************************
+
+1.  Bug Fix
+    
+    Specifying the version in the viewmodel to initially load is failing.  Note
+    the version is now passed as a config property as opposed to a data member
+    in the viewmodel:
+    
+        {
+            xtype: 'mantischangelog,
+            version: '1.10.0'
+        }
+
+2. Bug Fix
+    
+   When the changelog retrieval fails, the error message returned from the
+   server is not displaying in the error alert.  Only a generic error is
+   displayed.
+
