@@ -16,7 +16,7 @@
     "distRelease":       "N",
     "distReleasePath":   "",
     "distDocPath":       "",
-    "githubRelease":     "Y",
+    "githubRelease":     "N",
     "githubAssets":      "",
     "githubUser":        "spmeesseman",
     "historyFile":       "doc\\history.txt",
@@ -24,7 +24,7 @@
     "historyLineLen":    80,
     "homePage":          "",
     "interactive":       "N",
-    "mantisbtRelease":   "N",
+    "mantisbtRelease":   "Y",
     "mantisbtApiToken":  "${MANTISBT_API_TOKEN}",
     "mantisbtPlugin":    "",
     "mantisbtProject":   "",
@@ -41,8 +41,8 @@
     "pathtoMainRoot":    "",
     "pathPreRoot":       "",
     "postBuildCommand":  "",
-    "repoType":          "git",
-    "repo":              "https://github.com/spmeesseman/pja/extjs-pkg-mantis.git",
+    "repoType":          "svn",
+    "repo":              "https://svn.development.pjats.com/pja/extjs-pkg-mantis/trunk",
     "skipCommit":        "N",
     "skipDeployPush":    "N",
     "skipVersionEdits":  "Y",
@@ -54,18 +54,5 @@
     "vcTagPrefix":       "",
     "versionFiles":      "",
     "versionText":       "Version",
-    "writeLog":          "N",
-    "xRuns": [
-    {
-        "repoType":          "svn",
-        "repo":              "https://svn.development.pjats.com/pja/extjs-pkg-mantis/trunk",
-        "homePage":          "https://npm.development.pjats.com/-/web/detail/@perryjohnson/extjs-pkg-mantis",
-        "bugs":              "https://app1.development.pjats.com/projects",
-        "npmRegistry":       "https://npm.development.pjats.com",
-        "npmScope":          "@perryjohnson",
-        "githubRelease":     "N",
-        "emailNotification": "Y",
-        "mantisbtRelease":   "Y",
-        "textEditor":        ""
-    }]
+    "writeLog":          "N"
 }
