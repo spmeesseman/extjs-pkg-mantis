@@ -22,6 +22,11 @@ Ext.define('Ext.ux.mantis.Changelog',
         version: true
     },
 
+    twoWayBindable:
+    {
+        version: true
+    },
+
     layout: 
     {
         type: 'vbox',
@@ -94,37 +99,33 @@ Ext.define('Ext.ux.mantis.Changelog',
     {
         afterrender: function(panel)
         {
-            var vm = panel.getViewModel();
-            var mask = ToolkitUtils.mask(panel, 'Loading mantis changelog');
+            Ext.create('Ext.util.DelayedTask', function()
+            {
+                var vm = panel.getViewModel();
+                var mask = ToolkitUtils.mask(panel, 'Loading mantis changelog');
 
-            //
-            // Default to current version
-            //
-            if (!panel.getVersion()) {
-                panel.setVersion(Ext.manifest.version); 
-            }
-
-            //
-            // Build utility version cache first
-            //
-            MantisUtils.buildVersionCache()
-            .then(function(cache)
-            {
                 //
-                // Now get changelog for the current version
+                // Build utility version cache first
                 //
-                vm.set('versions', cache);
-                return panel.getChangeLog();
-            })
-            .then(function(cache)
-            {
-                ToolkitUtils.unmask(mask);
-            })
-            .catch(function(obj)
-            {
-                ToolkitUtils.unmask(mask);
-                Utils.alertError("Error retrieving changelog<br><br>" + obj.reason);
-            });
+                MantisUtils.buildVersionCache()
+                .then(function(cache)
+                {
+                    //
+                    // Now get changelog for the current version
+                    //
+                    vm.set('versions', cache);
+                    return panel.getChangeLog();
+                })
+                .then(function(cache)
+                {
+                    ToolkitUtils.unmask(mask);
+                })
+                .catch(function(obj)
+                {
+                    ToolkitUtils.unmask(mask);
+                    Utils.alertError("Error retrieving changelog<br><br>" + obj.reason);
+                });
+            }, panel).delay(100);
         }
     },
     
@@ -157,6 +158,7 @@ Ext.define('Ext.ux.mantis.Changelog',
         {
             select: function(cmb)
             {
+                cmb.up('mantischangelog').setVersion(cmb.getValue());
                 cmb.up('mantischangelog').getChangeLog();
             }
         }
@@ -206,22 +208,28 @@ Ext.define('Ext.ux.mantis.Changelog',
 
     getChangeLog: function()
     {
+        var me = this;
+        var vm = me.getViewModel();
+        //
+        // Default to current extjs version if not set in vm
+        //
+        if (!me.getVersion() && vm.get('versionArrays')[0]) {
+            me.setVersion(Ext.manifest.version); 
+        }
         //
         // Get changelog for the version set in the view model
         //
-        var me = this;
         return new Ext.Promise(function(resolve, reject)
         {
+            var mask = ToolkitUtils.mask(me, 'Loading mantis changelog');
             MantisUtils.getChangeLog(me.getVersion())
-            .then(function(content)
+            .then((content) =>
             {
                 me.getViewModel().set('content', content);
                 resolve();
             })
-            .catch(function(obj)
-            {
-                reject(obj);
-            });
+            .catch((obj) => { reject(obj); })
+            .finally(() =>  { ToolkitUtils.unmask(mask); });
         });
     }
     
