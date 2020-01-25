@@ -361,3 +361,30 @@ January 18th, 2020
    server is not displaying in the error alert.  Only a generic error is
    displayed.
 
+
+Version 1.4.2
+January 24th, 2020
+-------------------------------------------------------------------------------
+********************************************************************************
+***                                                                            *
+*** Verify that the following requirements have been satisfied:                *
+***                                                                            *
+*** Requirements:                                                              *
+*** -------------                                                              *
+***                                                                            *
+***    1.  Operating System            : Windows 7+                            * 
+***                                                                            *
+***    2.  CPU                         : 1.0+ GHz                              *
+***                                                                            *
+***    3.  RAM                         : 128 MB                                *
+***                                                                            *
+***    4.  ExtJS Core                  : 6.7+                                  *
+***                                                                            *
+********************************************************************************
+
+1.  Bug Fix:  Changelog
+    
+    The default version to display is reset  to Ext.manifest.version if the
+    'version' config is bound to a data property of the owning component's view
+    model.
+
