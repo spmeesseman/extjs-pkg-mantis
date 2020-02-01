@@ -52,6 +52,12 @@
         "resource": {
             "paths": ""
         },
+        "resources": [
+            {
+              "path": "${package.dir}/resources",
+              "output": "shared"
+            }
+        ],
         "classic": {
             "sass": {
                 "namespace": "Ext.ux",

@@ -5,6 +5,7 @@ Ext.define('Ext.ux.mantis.NewTicket',
     xtype: 'newticket',
     
     requires: [ 
+        'Ext.Img',
         'Ext.ux.mantis.model.Field',
         'Ext.ux.mantis.model.Category',
         'Ext.ux.mantis.model.Priority',
@@ -38,60 +39,85 @@ Ext.define('Ext.ux.mantis.NewTicket',
     
     items: [
     {
-        xtype: 'combo',
-        fieldLabel: 'Category',
-        displayField:'name',
-        valueField:'id',
-        editable: false,
-        localAfterLoad: true,
-        bind: '{record.category.id}',
-        store:
+        layout: 'hbox',
+        items: [
         {
-            type: 'mantis.categories'
-        }
-    },
-    {
-        xtype: 'combo',
-        fieldLabel: 'Reproducibility',
-        displayField:'label',
-        valueField:'id',
-        editable: false,
-        localAfterLoad: true,
-        bind: '{record.reproducibility.id}',
-        store:
+            flex: 1,
+            layout: 
+            {
+                type: 'vbox',
+                align : 'stretch',
+                pack  : 'start'
+            },
+            defaults:
+            {
+                flex :1
+            },
+            items: [
+            {
+                xtype: 'combo',
+                fieldLabel: 'Category',
+                displayField:'name',
+                valueField:'id',
+                editable: false,
+                localAfterLoad: true,
+                bind: '{record.category.id}',
+                store:
+                {
+                    type: 'mantis.categories'
+                }
+            },
+            {
+                xtype: 'combo',
+                fieldLabel: 'Reproducibility',
+                displayField:'label',
+                valueField:'id',
+                editable: false,
+                localAfterLoad: true,
+                bind: '{record.reproducibility.id}',
+                store:
+                {
+                    type: 'mantis.fieldstore',
+                    model: 'Ext.ux.mantis.model.Reproducibility'
+                }
+            },
+            {
+                xtype: 'combo',
+                fieldLabel: 'Severity',
+                displayField:'label',
+                valueField:'id',
+                editable: false,
+                localAfterLoad: true,
+                bind: '{record.severity.id}',
+                store:
+                {
+                    type: 'mantis.fieldstore',
+                    model: 'Ext.ux.mantis.model.Severity'
+                }
+            },
+            {
+                xtype: 'combo',
+                fieldLabel: 'Priority',
+                displayField:'label',
+                valueField:'id',
+                editable: false,
+                localAfterLoad: true,
+                bind: '{record.priority.id}',
+                store:
+                {
+                    type: 'mantis.fieldstore',
+                    model: 'Ext.ux.mantis.model.Priority',
+                    xtraParams: { option: 'priority_enum_string' }
+                }
+            }]
+        },
         {
-            type: 'mantis.fieldstore',
-            model: 'Ext.ux.mantis.model.Reproducibility'
-        }
-    },
-    {
-        xtype: 'combo',
-        fieldLabel: 'Severity',
-        displayField:'label',
-        valueField:'id',
-        editable: false,
-        localAfterLoad: true,
-        bind: '{record.severity.id}',
-        store:
-        {
-            type: 'mantis.fieldstore',
-            model: 'Ext.ux.mantis.model.Severity'
-        }
-    },
-    {
-        xtype: 'combo',
-        fieldLabel: 'Priority',
-        displayField:'label',
-        valueField:'id',
-        editable: false,
-        localAfterLoad: true,
-        bind: '{record.priority.id}',
-        store:
-        {
-            type: 'mantis.fieldstore',
-            model: 'Ext.ux.mantis.model.Priority',
-            xtraParams: { option: 'priority_enum_string' }
-        }
+            xtype: 'image',
+            src: Ext.manifest.resources.base + '/resources/mantis/mantisbt.png',
+            height: 116,
+            width: 116,
+            padding: 10
+        }]
     },
     {
         xtype: 'textfield',
