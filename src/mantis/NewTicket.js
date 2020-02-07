@@ -190,7 +190,7 @@ Ext.define('Ext.ux.mantis.NewTicket',
     clearValues: function()
     {
         var cmps = this.query('textfield');
-        for (var c in cmps) {console.log(cmps[c].getXType());
+        for (var c in cmps) {
             if (cmps[c].getXType() == 'combobox') {
                 continue;
             }
