@@ -1,3 +1,7 @@
+/**
+ * @class Ext.ux.mantis.model.Resolution
+ * 
+ */
 Ext.define('Ext.ux.mantis.model.Resolution', 
 {
     extend: 'Ext.data.Model',    

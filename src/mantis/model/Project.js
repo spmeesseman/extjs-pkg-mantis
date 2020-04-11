@@ -1,3 +1,7 @@
+/**
+ * @class Ext.ux.mantis.model.Project
+ * 
+ */
 Ext.define('Ext.ux.mantis.model.Project', 
 {
     extend: 'Ext.data.Model',    

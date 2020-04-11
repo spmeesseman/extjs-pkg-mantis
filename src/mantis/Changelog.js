@@ -1,4 +1,7 @@
-
+/**
+ * @class Ext.ux.mantis.Changelog
+ * 
+ */
 Ext.define('Ext.ux.mantis.Changelog', 
 {
     extend: 'Ext.panel.Panel',

@@ -1,4 +1,7 @@
-
+/**
+ * @class Ext.ux.mantis.store.FieldStore
+ * 
+ */
 Ext.define('Ext.ux.mantis.store.FieldStore', 
 {
     extend: 'Ext.ux.mantis.store.Base',

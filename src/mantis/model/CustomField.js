@@ -1,3 +1,7 @@
+/**
+ * @class Ext.ux.mantis.model.CustomField
+ * 
+ */
 Ext.define('Ext.ux.mantis.model.CustomField', 
 {
     extend: 'Ext.data.Model',    

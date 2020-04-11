@@ -1,3 +1,7 @@
+/**
+ * @class Ext.ux.mantis.store.Tickets
+ * 
+ */
 Ext.define('Ext.ux.mantis.store.Tickets', 
 {
     extend: 'Ext.ux.mantis.store.Base',

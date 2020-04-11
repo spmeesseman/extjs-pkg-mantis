@@ -1,4 +1,8 @@
 
+/**
+ * @class Ext.ux.mantis.model.Ticket
+ * 
+ */
 Ext.define('Ext.ux.mantis.model.Ticket', 
 {
     extend: 'Ext.data.Model',    

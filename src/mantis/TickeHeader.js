@@ -1,4 +1,7 @@
-
+/**
+ * @class Ext.ux.mantis.TicketHeader
+ * 
+ */
 Ext.define('Ext.ux.mantis.TicketHeader', 
 {
     extend: 'Ext.panel.Panel',

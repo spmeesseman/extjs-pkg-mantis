@@ -1,3 +1,7 @@
+/**
+ * @class Ext.ux.mantis.model.ViewState
+ * 
+ */
 Ext.define('Ext.ux.mantis.model.ViewState', 
 {
     extend: 'Ext.data.Model',    

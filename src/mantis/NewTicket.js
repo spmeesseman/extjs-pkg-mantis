@@ -1,4 +1,7 @@
-
+/**
+ * @class Ext.ux.mantis.NewTicket
+ * 
+ */
 Ext.define('Ext.ux.mantis.NewTicket', 
 {
     extend: 'Ext.panel.Panel',

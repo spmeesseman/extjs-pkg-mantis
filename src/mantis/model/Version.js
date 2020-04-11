@@ -1,3 +1,7 @@
+/**
+ * @class Ext.ux.mantis.model.Version
+ * 
+ */
 Ext.define('Ext.ux.mantis.model.Version', 
 {
     extend: 'Ext.data.Model',    

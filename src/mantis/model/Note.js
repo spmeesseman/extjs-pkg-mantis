@@ -1,4 +1,8 @@
 
+/**
+ * @class Ext.ux.mantis.model.Note
+ * 
+ */
 Ext.define('Ext.ux.mantis.model.Note', 
 {
     extend: 'Ext.data.Model',    

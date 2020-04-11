@@ -1,4 +1,7 @@
-
+/**
+ * @class Ext.ux.mantis.store.Base
+ * 
+ */
 Ext.define('Ext.ux.mantis.store.Base', 
 {
     extend: 'Ext.data.Store',

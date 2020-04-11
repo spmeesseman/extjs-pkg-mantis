@@ -1,4 +1,7 @@
-
+/**
+ * @class Ext.ux.mantis.store.Versions
+ * 
+ */
 Ext.define('Ext.ux.mantis.store.Versions', 
 {
     extend: 'Ext.ux.mantis.store.Base',

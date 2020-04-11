@@ -1,3 +1,7 @@
+/**
+ * @class Ext.ux.mantis.model.Priority
+ * 
+ */
 Ext.define('Ext.ux.mantis.model.Priority', 
 {
     extend: 'Ext.ux.mantis.model.Field',    

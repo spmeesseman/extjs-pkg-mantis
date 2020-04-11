@@ -1,4 +1,7 @@
-
+/**
+ * @class Ext.ux.mantis.store.Severities
+ * 
+ */
 Ext.define('Ext.ux.mantis.store.Severities', 
 {
     extend: 'Ext.data.SimpleStore',
