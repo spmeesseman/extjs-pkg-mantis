@@ -9,31 +9,31 @@ Ext.define('Ext.ux.mantis.store.Categories',
     
     model: 'Ext.ux.mantis.model.Category',
     
+    listeners:
+    {
+        // eslint-disable-next-line consistent-return
+        beforeload: function(store, operation, eopts)
+        {
+            store.getProxy().setReader(
+            {
+                type: 'json',
+                rootProperty: function(data) {
+                    for (var p in data.projects) {
+                        if (data.projects[p].id == store.getOptions().project_id) {
+                            return data.projects[p].categories;
+                        }
+                    }
+                    return data.projects[0].categories;
+                }
+            });
+        }
+    },
+
     proxy: 
     {
         type: 'rest',
-        url: Ext.manifest.mantis.location ? Ext.manifest.mantis.location + 'api/rest/projects' : '',
-        useDefaultXhrHeader: false,
-        params:
-        {
-            project_id: Ext.manifest.mantis.project_id
-        },
-        headers:
-        {
-            Authorization: Ext.manifest.mantis.token
-        },
-        reader:
-        {
-            type: 'json',
-            rootProperty: function(data) {
-                for (var p in data.projects) {
-                    if (data.projects[p].id == Ext.manifest.mantis.project_id) {
-                        return data.projects[p].categories;
-                    }
-                }
-                return data.projects[0].categories;
-            }
-        }
+        url: 'api/rest/projects',
+        useDefaultXhrHeader: false
     }
     
 });

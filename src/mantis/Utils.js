@@ -7,7 +7,7 @@ Ext.define('Ext.ux.mantis.Utils',
 
     versionCache: null,
 
-    buildVersionCache: function()
+    buildVersionCache: function(options)
     {
         //
         // Build utility version cache
@@ -15,146 +15,149 @@ Ext.define('Ext.ux.mantis.Utils',
     
         return new Ext.Promise(function(resolve, reject)
         {
-            if (!Ext.manifest.mantis || !Ext.manifest.mantis.location || !Ext.manifest.mantis.project_name)
+            if (!options.token || !options.location || !options.project_name)
             {
-                Ext.csi.Utilities.Promises.emptySuccess()
-                .then(function()
-                {
-                    Ext.csi.Utilities.alertError("Ext.manifest.mantis.location || Ext.manifest.mantis.project_name " +
+                Ext.csi.Utilities.alertError("location || project_name || token " +
                                                 "must be set prior to calling this function");
-                    reject([]);
-                });
+                reject([]);
             }
-            else if (!Ext.csi.Utilities.versionCache)
+            else if (!MantisUtils.versionCache)
             {
-                var url = Ext.manifest.mantis.location + 'plugins/Releases/api/releases/' + Ext.manifest.mantis.project_name;
-                Ext.csi.Utilities.Promises.ajaxRequest(url, null, null, false, null,
+                Ext.Ajax.request(
                 {
-                    Authorization: Ext.manifest.mantis.token
-                }, 'GET')
-                .then(function(obj)
+                    url: options.location + 'plugins/Releases/api/releases/' + options.project_name,
+                    headers: {
+                        Authorization: options.token
+                    }
+                })
+                .then(function(response)
                 {
-                    var jso = Ext.util.JSON.decode(obj.response.responseText);
+                    var jso = response.responseJson ? response.responseJson :
+                             response.responseText ? Ext.util.JSON.decode(response.responseText) : null;
                     if (jso.projects && jso.projects[0] && jso.projects[0].versions) 
                     {
-                        Ext.csi.Utilities.versionCache = [];
+                        MantisUtils.versionCache = [];
                         var versions = jso.projects[0].versions;
                         for (var v in versions)
                         {
                             if (versions[v].released === true) { // version are sorted newest to oldest
-                                Ext.csi.Utilities.versionCache.push(versions[v].name);
+                                MantisUtils.versionCache.push(versions[v].name);
                             }
                         }
-                        resolve(Ext.csi.Utilities.versionCache);
+                        resolve(MantisUtils.versionCache);
                     }
                     else {
-                        Ext.csi.Utilities.alertError("Could not retrieve changelog");
+                        Ext.Msg.alert("Could not retrieve changelog");
                         reject([]);
                     }
                 })
                 .catch(function()
                 {
-                    Ext.csi.Utilities.alertError("Error retrieving changelog");
+                    Ext.Msg.alert("Error retrieving changelog");
                     reject([]);
                 });
             }
             else
             {
-                Ext.csi.Utilities.Promises.emptySuccess()
-                .then(function()
-                {
-                    resolve(Ext.csi.Utilities.versionCache);
-                });
+                resolve(MantisUtils.versionCache);
             }
         });
     },
 
 
-    getVersionNext: function(version)
+    getVersionNext: function(version, options)
     {
-        if (Ext.csi.Utilities.versionCache)
+        if (MantisUtils.versionCache)
         {
-            for (var v in Ext.csi.Utilities.versionCache)
+            for (var v in MantisUtils.versionCache)
             {
-                if (Ext.csi.Utilities.versionCache[v] === version) { // version are sorted newest to oldest
+                if (MantisUtils.versionCache[v] === version) { // version are sorted newest to oldest
                     var vn = parseInt(v) - 1;
                     if (vn >= 0) {
-                        return Ext.csi.Utilities.versionCache[vn];
+                        return MantisUtils.versionCache[vn];
                     }
                 }
             }
         }
-        else {
-            Ext.csi.Utilities.alertError("Utils.buildVersionCache() must be called prior to calling this function");
+        else if (options.logFn) {
+            options.logFn("Utils.buildVersionCache() must be called prior to calling this function");
         }
         
         return version;
     },
 
 
-    getVersionPrevious: function(version)
+    getVersionPrevious: function(version, options)
     {
-        if (Ext.csi.Utilities.versionCache)
+        if (MantisUtils.versionCache)
         {
-            for (var v in Ext.csi.Utilities.versionCache)
+            for (var v in MantisUtils.versionCache)
             {
-                if (Ext.csi.Utilities.versionCache[v] === version) { // version are sorted newest to oldest
+                if (MantisUtils.versionCache[v] === version) { // version are sorted newest to oldest
                     var vn = parseInt(v) + 1;
-                    if (vn < Ext.csi.Utilities.versionCache.length) {
-                        return Ext.csi.Utilities.versionCache[vn];
+                    if (vn < MantisUtils.versionCache.length) {
+                        return MantisUtils.versionCache[vn];
                     }
                 }
             }
         }
-        else {
-            Ext.csi.Utilities.alertError("Utils.buildVersionCache() must be called prior to calling this function");
+        else if (options.logFn) {
+            options.logFn("Utils.buildVersionCache() must be called prior to calling this function");
         }
         
         return version;
     },
 
 
-    getChangeLog: function(version)
+    getChangeLog: function(version, options)
     {
+        if (options.logFn) {
+            options.logFn('[Mantis] Get changelog start async', 1);
+        }
+
         return new Ext.Promise(function(resolve, reject)
         {
-            if (!Ext.manifest.mantis || !Ext.manifest.mantis.location || !Ext.manifest.mantis.project_name)
+            if (!options.token || !options.location || !options.project_name)
             {
-                Ext.csi.Utilities.Promises.emptySuccess()
-                .then(function()
-                {
-                    Ext.csi.Utilities.alertError("Ext.manifest.mantis.location || Ext.manifest.mantis.project_name " +
-                                                "must be set prior to calling this function");
-                    reject([]);
-                });
-                return;
+                if (options.logFn) {
+                    options.logFn("options.location || options.project_name " +
+                                    "must be set prior to calling this function");
+                }
+                reject([]);
             }
 
-            var url = Ext.manifest.mantis.location + 'plugins/Releases/api/releases/' + Ext.manifest.mantis.project_name + '/changelog/' + version;
-            Ext.csi.Utilities.Promises.ajaxRequest(url, null, null, false, null,
+            Ext.Ajax.request(
             {
-                Authorization: Ext.manifest.mantis.token
-            }, 'GET')
-            .then(function(obj)
+                url: options.location + 'plugins/Releases/api/releases/' + options.project_name + '/changelog/' + version,
+                headers: {
+                    Authorization: options.token
+                }
+            })
+            .then(function(response)
             {
-                var jso = Ext.util.JSON.decode(obj.response.responseText);
-                if (jso.changelog) 
+                var jso = response.responseJson ? response.responseJson :
+                          response.responseText ? Ext.util.JSON.decode(response.responseText) : null;
+                if (jso && jso.changelog) 
                 {
                     var cl = jso.changelog.replace(/<a[^>]*>/gi, '').replace(/<\/a>/gi, '').replace(/<table/gi, '<table cellpadding="8"');
                     resolve(cl);
                 }
-                else if (jso.changelog === '' || jso.changelog === false) {
+                else if (jso && (jso.changelog === '' || jso.changelog === false)) {
                     resolve('');
                 }
-                else {
-                    Utils.alertError("Could not retrieve changelog");
-                    reject('');
+                else if (options.logFn) {
+                    options.logFn("Could not retrieve changelog");
+                    Ext.Msg.alert("Error retrieving changelog");
+                    reject(response);
                 }
             })
-            .catch(function(obj)
+            .catch(function(response)
             {
-                Utils.alertError("Error retrieving changelog");
-                reject(obj);
+                if (options.logFn) {
+                    options.logFn("Error retrieving changelog");
+                    Ext.Msg.alert("Error retrieving changelog");
+                }
+                reject(response);
             });
         });
     }

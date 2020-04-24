@@ -115,7 +115,7 @@ Ext.define('Ext.ux.mantis.TicketDetail',
             filter: 'date',
             renderer: function(value, metaData, record) 
             {  
-                return Utils.formatDateAndTime(value, GEMS.user.userpref().getAt(0).get('locale'));
+                return Utils.formatDateAndTime(value);
             } 
         },
         { 

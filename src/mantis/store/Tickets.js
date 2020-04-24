@@ -9,15 +9,19 @@ Ext.define('Ext.ux.mantis.store.Tickets',
     
     model: 'Ext.ux.mantis.model.Ticket',
     
+    listeners:
+    {
+        // eslint-disable-next-line consistent-return
+        beforeload: function(store, operation, eopts)
+        {
+            store.getProxy().setUrl(store.getOptions().location + 'plugins/ApiExtend/api/issues/' + store.getOptions().project_name);
+        }
+    },
+
     proxy: {
         type: 'rest',
-        url: Ext.manifest.mantis.location ? Ext.manifest.mantis.location + 'plugins/ApiExtend/api/issues/' + Ext.manifest.mantis.project_name : '',
         useDefaultXhrHeader: false,
         limitParam: 'page_size',
-        headers:
-        {
-            Authorization: Ext.manifest.mantis.token
-        },
         reader:
         {
             type: 'json',

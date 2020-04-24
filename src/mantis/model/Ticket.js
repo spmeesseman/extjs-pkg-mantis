@@ -19,15 +19,13 @@ Ext.define('Ext.ux.mantis.model.Ticket',
         'Ext.ux.mantis.model.ViewState'
     ],
 
+    appOptions: {},
+
     proxy: {
         type: 'rest',
-        url: Ext.manifest.mantis.location ? Ext.manifest.mantis.location + 'api/rest/issues' : '',
+        url: 'api/rest/issues',
         useDefaultXhrHeader: false,
         limitParam: 'page_size',
-        headers:
-        {
-            Authorization: Ext.manifest.mantis.token
-        },
         reader:
         {
             type: 'json',
@@ -56,37 +54,48 @@ Ext.define('Ext.ux.mantis.model.Ticket',
 
     getVersion: function()
     {
-        var version = Ext.manifest.version;
-        if (Ext.manifest.mantis.versionIsPatchX === true) {
-            version = version.substring(0, version.lastIndexOf("."));
-            version = version + ".x";
+        var me = this,
+            version = '';
+        if (!me.appOptions.noVersion) {
+            version = Ext.manifest.version;
+            if (me.appOptions.versionIsPatchX === true) {
+                version = version.substring(0, version.lastIndexOf("."));
+                version = version + ".x";
+            }
         }
         return version;
     },
-
+    
     // eslint-disable-next-line consistent-return
     save: function(options)
     {
         var me = this;
 
-        if (!Ext.manifest.mantis.token || !Ext.manifest.mantis.project_id) {
+        if (!me.appOptions.token || !me.appOptions.project_id) {
             return false;
         }
         
         if (me.phantom) {
             me.set('created_at', new Date());
-            me.set('project', { id: Ext.manifest.mantis.project_id });
-            me.set('version', { name: me.getVersion() });
-            if (Ext.manifest.mantis.defaultTicketValues.custom_fields) {
-                me.set('custom_fields', Ext.manifest.mantis.defaultTicketValues.custom_fields);
+            me.set('project', { id: me.appOptions.project_id });
+            if (!me.appOptions.noVersion) {
+                me.set('version', { name: me.getVersion() });
+            }
+            if (me.appOptions.defaultTicketValues.custom_fields) {
+                me.set('custom_fields', me.appOptions.defaultTicketValues.custom_fields);
             }
         }
 
-        me.getProxy().setHeaders(
+        var proxy = me.getProxy();
+        proxy.setHeaders(
         {
-            Authorization: Ext.manifest.mantis.token
+            Authorization: me.appOptions.token
         });
 
+        var url = proxy.getUrl();
+        if (url.indexOf(me.appOptions.location) === -1) {
+            proxy.setUrl(me.appOptions.location + url);
+        }
         //
         // Proceed to parent save()
         //
@@ -109,7 +118,6 @@ Ext.define('Ext.ux.mantis.model.Ticket',
         type: 'string'  
     },{ 
         name: 'category',
-        defaultValue: Ext.manifest.mantis && Ext.manifest.mantis.defaultTicketValues ? Ext.manifest.mantis.defaultTicketValues.category : 1,
         reference: 
         {
             type: 'Ext.ux.mantis.model.Category',
@@ -128,7 +136,6 @@ Ext.define('Ext.ux.mantis.model.Ticket',
     },
     { 
         name: 'priority',
-        defaultValue: Ext.manifest.mantis && Ext.manifest.mantis.defaultTicketValues ? Ext.manifest.mantis.defaultTicketValues.priority : 30,
         reference: 
         {
             type: 'Ext.ux.mantis.model.Priority',
@@ -138,7 +145,6 @@ Ext.define('Ext.ux.mantis.model.Ticket',
     },
     { 
         name: 'project',
-        defaultValue: Ext.manifest.mantis.project_id,
         reference: 
         {
             type: 'Ext.ux.mantis.model.Project',
@@ -151,7 +157,6 @@ Ext.define('Ext.ux.mantis.model.Ticket',
     },
     { 
         name: 'reproducibility',
-        defaultValue: Ext.manifest.mantis && Ext.manifest.mantis.defaultTicketValues ? Ext.manifest.mantis.defaultTicketValues.reproducibility : 70,
         reference: 
         {
             type: 'Ext.ux.mantis.model.Reproducibility',
@@ -164,7 +169,6 @@ Ext.define('Ext.ux.mantis.model.Ticket',
     },
     { 
         name: 'severity',
-        defaultValue: Ext.manifest.mantis && Ext.manifest.mantis.defaultTicketValues ? Ext.manifest.mantis.defaultTicketValues.severity : 50,
         reference: 
         {
             type: 'Ext.ux.mantis.model.Severity',
@@ -183,7 +187,6 @@ Ext.define('Ext.ux.mantis.model.Ticket',
     },
     { 
         name: 'version',
-        defaultValue: Ext.manifest.version,
         reference: 
         {
             type: 'Ext.ux.mantis.model.Version',

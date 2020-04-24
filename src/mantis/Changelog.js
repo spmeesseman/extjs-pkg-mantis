@@ -12,9 +12,10 @@ Ext.define('Ext.ux.mantis.Changelog',
     
     reference: 'mantischangelog',
     scrollable: true,
-    	
+
     config:
     {
+        options: {},
         closeFn: false,
         version: undefined
     },
@@ -110,7 +111,7 @@ Ext.define('Ext.ux.mantis.Changelog',
                 //
                 // Build utility version cache first
                 //
-                MantisUtils.buildVersionCache()
+                MantisUtils.buildVersionCache(panel.getOptions())
                 .then(function(cache)
                 {
                     //
@@ -176,7 +177,7 @@ Ext.define('Ext.ux.mantis.Changelog',
         handler: function(btn, eopts)
         {
             var panel = btn.up('mantischangelog');
-            panel.setVersion(MantisUtils.getVersionPrevious(panel.getVersion()));
+            panel.setVersion(MantisUtils.getVersionPrevious(panel.getVersion(), panel.getOptions()));
             panel.getChangeLog();
         }
     },
@@ -191,7 +192,7 @@ Ext.define('Ext.ux.mantis.Changelog',
         handler: function(btn, eopts)
         {
             var panel = btn.up('mantischangelog');
-            panel.setVersion(MantisUtils.getVersionNext(panel.getVersion()));
+            panel.setVersion(MantisUtils.getVersionNext(panel.getVersion(), panel.getOptions()));
             panel.getChangeLog();
         }
     },
@@ -225,7 +226,7 @@ Ext.define('Ext.ux.mantis.Changelog',
         return new Ext.Promise(function(resolve, reject)
         {
             var mask = ToolkitUtils.mask(me, 'Loading mantis changelog');
-            MantisUtils.getChangeLog(me.getVersion())
+            MantisUtils.getChangeLog(me.getVersion(), me.getOptions())
             .then((content) =>
             {
                 me.getViewModel().set('content', content);

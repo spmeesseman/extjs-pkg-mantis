@@ -16,117 +16,149 @@ Ext.define('Ext.ux.mantis.Tickets',
     flex:1,
     border: false,
     
-    items: [
-    {
-        title: 'New Ticket',
-        iconCls: 'far fa-ticket-alt',
-        layout: 
+    options: {
+        project_id: 1,
+        project_name: "",
+        token: "",
+        versionIsPatchX: false,
+        location: "",
+        defaultTicketValues:
         {
-            type: 'vbox',
-            align : 'stretch',
-            pack  : 'start'
+            priority: 30,
+            severity: 50,
+            reproducibility: 70,
+            category: 1,
+            custom_fields: [
+            {
+                field: 
+                { 
+                    name: "App User" 
+                },
+                value: ""
+            },
+            {
+                field: 
+                { 
+                    name: "App Tag" 
+                },
+                value: ""
+            }]
         },
-        items: [
+        myTicketFilters: [
         {
-            xtype: 'newticket'
+            property: "custom_field_1" ,
+            value: "App User"
+        },
+        {
+            property: "custom_field_2",
+            value: "App Tag"
+        }],
+        locationTicketFilters: [
+        {
+            property: "custom_field_2" ,
+            value: "App Tag"
         }]
     },
+
+    initComponent: function()
     {
-        title: 'My Tickets',
-        iconCls: 'far fa-bars',
-        layout: 
+        var me = this;
+
+        me.items = [
         {
-            type: 'vbox',
-            align : 'stretch',
-            pack  : 'start'
-        },
-        items: [
-        {
-            xtype: 'ticketlist',
-            params: {
-                type: 'all'
-            },
-            listeners:
+            title: 'New Ticket',
+            iconCls: 'far fa-ticket-alt',
+            layout: 
             {
-                beforerender: function(tl, eopts)
-                {
-                    tl.params.filters = Ext.util.JSON.encode(Ext.manifest.mantis.myTicketFilters);
-                }
-            }
-        }]
-    },
-    {
-        title: 'My Open Tickets',
-        iconCls: 'far fa-bars',
-        layout: 
-        {
-            type: 'vbox',
-            align : 'stretch',
-            pack  : 'start'
-        },
-        items: [
-        {
-            xtype: 'ticketlist',
-            params: {
-                type: 'open'
+                type: 'vbox',
+                align : 'stretch',
+                pack  : 'start'
             },
-            listeners:
+            items: [
             {
-                beforerender: function(tl, eopts)
-                {
-                    tl.params.filters = Ext.util.JSON.encode(Ext.manifest.mantis.myTicketFilters);
-                }
-            }
-        }]
-    },
-    {
-        title: 'My Closed Tickets',
-        iconCls: 'far fa-bars',
-        layout: 
-        {
-            type: 'vbox',
-            align : 'stretch',
-            pack  : 'start'
+                xtype: 'newticket',
+                options: me.options
+            }]
         },
-        items: [
         {
-            xtype: 'ticketlist',
-            params: {
-                type: 'closed'
-            },
-            listeners:
+            title: 'My Tickets',
+            iconCls: 'far fa-bars',
+            layout: 
             {
-                beforerender: function(tl, eopts)
-                {
-                    tl.params.filters = Ext.util.JSON.encode(Ext.manifest.mantis.myTicketFilters);
+                type: 'vbox',
+                align : 'stretch',
+                pack  : 'start'
+            },
+            items: [
+            {
+                xtype: 'ticketlist',
+                options: me.options,
+                params: {
+                    type: 'all',
+                    filters: Ext.util.JSON.encode(me.options.myTicketFilters)
                 }
-            }
-        }]
-    },
-    {
-        title: 'Location Tickets',
-        border: false,
-        iconCls: 'far fa-bars',
-        layout: 
-        {
-            type: 'vbox',
-            align : 'stretch',
-            pack  : 'start'
+            }]
         },
-        items: [
         {
-            xtype: 'ticketlist',
-            params: {
-                type: 'all'
-            },
-            listeners:
+            title: 'My Open Tickets',
+            iconCls: 'far fa-bars',
+            layout: 
             {
-                beforerender: function(tl, eopts)
-                {
-                    tl.params.filters = Ext.util.JSON.encode(Ext.manifest.mantis.locationTicketFilters);
+                type: 'vbox',
+                align : 'stretch',
+                pack  : 'start'
+            },
+            items: [
+            {
+                xtype: 'ticketlist',
+                options: me.options,
+                params: {
+                    type: 'open',
+                    filters: Ext.util.JSON.encode(me.options.myTicketFilters)
                 }
-            }
-        }]
-    }]
-    
+            }]
+        },
+        {
+            title: 'My Closed Tickets',
+            iconCls: 'far fa-bars',
+            layout: 
+            {
+                type: 'vbox',
+                align : 'stretch',
+                pack  : 'start'
+            },
+            items: [
+            {
+                xtype: 'ticketlist',
+                options: me.options,
+                params: {
+                    type: 'closed',
+                    filters: Ext.util.JSON.encode(me.options.myTicketFilters)
+                }
+            }]
+        },
+        {
+            title: 'Location Tickets',
+            border: false,
+            iconCls: 'far fa-bars',
+            layout: 
+            {
+                type: 'vbox',
+                align : 'stretch',
+                pack  : 'start'
+            },
+            items: [
+            {
+                xtype: 'ticketlist',
+                options: me.options,
+                params: {
+                    type: 'all',
+                    filters: Ext.util.JSON.encode(me.options.locationTicketFilters)
+                }
+            }]
+        }];
+
+        me.callParent();
+    }
+
 });

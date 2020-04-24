@@ -12,12 +12,8 @@ Ext.define('Ext.ux.mantis.store.FieldStore',
 
     proxy: {
         type: 'rest',
-        url: Ext.manifest.mantis.location ? Ext.manifest.mantis.location + 'api/rest/config' : '',
+        url: 'api/rest/config',
         useDefaultXhrHeader: false,
-        headers:
-        {
-            Authorization: Ext.manifest.mantis.token
-        },
         reader:
         {
             type: 'json',

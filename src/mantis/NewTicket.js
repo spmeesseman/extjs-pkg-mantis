@@ -12,7 +12,6 @@ Ext.define('Ext.ux.mantis.NewTicket',
         'Ext.ux.mantis.model.Field',
         'Ext.ux.mantis.model.Category',
         'Ext.ux.mantis.model.Priority',
-        'Ext.ux.mantis.model.Project',
         'Ext.ux.mantis.model.Reproducibility',
         'Ext.ux.mantis.model.Severity',
         'Ext.ux.mantis.model.Ticket',
@@ -24,15 +23,20 @@ Ext.define('Ext.ux.mantis.NewTicket',
     border:false,
     bodyPadding: '5 5 5 5',
     
+    config:
+    {
+        options: {}
+    },
+
     viewModel:
     {
         data:
         {
-            record: Ext.ux.mantis.model.Ticket.create(),
+            record: undefined,
             template: null
         }
     },
-    
+
     layout: 
     {
         type: 'vbox',
@@ -40,120 +44,143 @@ Ext.define('Ext.ux.mantis.NewTicket',
         pack  : 'start'
     },
     
-    items: [
+    initComponent: function()
     {
-        layout: 'hbox',
-        items: [
+        var me = this;
+        
+        me.items = [
         {
-            flex: 1,
-            layout: 
-            {
-                type: 'vbox',
-                align : 'stretch',
-                pack  : 'start'
-            },
-            defaults:
-            {
-                flex :1
-            },
+            layout: 'hbox',
             items: [
             {
-                xtype: 'combo',
-                fieldLabel: 'Category',
-                displayField:'name',
-                valueField:'id',
-                editable: false,
-                localAfterLoad: true,
-                bind: '{record.category.id}',
-                store:
+                flex: 1,
+                layout: 
                 {
-                    type: 'mantis.categories'
-                }
+                    type: 'vbox',
+                    align : 'stretch',
+                    pack  : 'start'
+                },
+                defaults:
+                {
+                    flex :1
+                },
+                items: [
+                {
+                    xtype: 'combo',
+                    fieldLabel: 'Category',
+                    displayField:'name',
+                    valueField:'id',
+                    editable: false,
+                    localAfterLoad: true,
+                    bind: '{record.category.id}',
+                    store:
+                    {
+                        type: 'mantis.categories',
+                        options: me.options
+                    }
+                },
+                {
+                    xtype: 'combo',
+                    fieldLabel: 'Reproducibility',
+                    displayField:'label',
+                    valueField:'id',
+                    editable: false,
+                    localAfterLoad: true,
+                    bind: '{record.reproducibility.id}',
+                    store:
+                    {
+                        type: 'mantis.fieldstore',
+                        model: 'Ext.ux.mantis.model.Reproducibility',
+                        options: me.options
+                    }
+                },
+                {
+                    xtype: 'combo',
+                    fieldLabel: 'Severity',
+                    displayField:'label',
+                    valueField:'id',
+                    editable: false,
+                    localAfterLoad: true,
+                    bind: '{record.severity.id}',
+                    store:
+                    {
+                        type: 'mantis.fieldstore',
+                        model: 'Ext.ux.mantis.model.Severity',
+                        options: me.options
+                    }
+                },
+                {
+                    xtype: 'combo',
+                    fieldLabel: 'Priority',
+                    displayField:'label',
+                    valueField:'id',
+                    editable: false,
+                    localAfterLoad: true,
+                    bind: '{record.priority.id}',
+                    store:
+                    {
+                        type: 'mantis.fieldstore',
+                        model: 'Ext.ux.mantis.model.Priority',
+                        options: me.options,
+                        xtraParams: { option: 'priority_enum_string' }
+                    }
+                }]
             },
             {
-                xtype: 'combo',
-                fieldLabel: 'Reproducibility',
-                displayField:'label',
-                valueField:'id',
-                editable: false,
-                localAfterLoad: true,
-                bind: '{record.reproducibility.id}',
-                store:
-                {
-                    type: 'mantis.fieldstore',
-                    model: 'Ext.ux.mantis.model.Reproducibility'
-                }
-            },
-            {
-                xtype: 'combo',
-                fieldLabel: 'Severity',
-                displayField:'label',
-                valueField:'id',
-                editable: false,
-                localAfterLoad: true,
-                bind: '{record.severity.id}',
-                store:
-                {
-                    type: 'mantis.fieldstore',
-                    model: 'Ext.ux.mantis.model.Severity'
-                }
-            },
-            {
-                xtype: 'combo',
-                fieldLabel: 'Priority',
-                displayField:'label',
-                valueField:'id',
-                editable: false,
-                localAfterLoad: true,
-                bind: '{record.priority.id}',
-                store:
-                {
-                    type: 'mantis.fieldstore',
-                    model: 'Ext.ux.mantis.model.Priority',
-                    xtraParams: { option: 'priority_enum_string' }
-                }
+                xtype: 'image',
+                src: Ext.manifest.resources.base + '/resources/mantis/mantisbt.png',
+                height: 116,
+                width: 116,
+                padding: 10
             }]
         },
         {
-            xtype: 'image',
-            src: Ext.manifest.resources.base + '/resources/mantis/mantisbt.png',
-            height: 116,
-            width: 116,
-            padding: 10
-        }]
-    },
-    {
-        xtype: 'textfield',
-        fieldLabel: 'Summary',
-        maxlength: 64,
-        bind: '{record.summary}',
-        allowBlank: false,
-        listeners:
-        {
-            afterrender: function(txt, eopts)
+            xtype: 'textfield',
+            fieldLabel: 'Summary',
+            maxlength: 64,
+            bind: '{record.summary}',
+            allowBlank: false,
+            listeners:
             {
-                txt.focus(true);
+                afterrender: function(txt, eopts)
+                {
+                    txt.focus(true);
+                }
             }
-        }
+        },
+        {
+            xtype: 'textarea',
+            fieldLabel: 'Description',
+            bind: '{record.description}',
+            grow: true
+        },
+        {
+            xtype: 'textarea',
+            fieldLabel: 'Steps to Reproduce',
+            bind: '{record.steps_to_reproduce}',
+            grow: true
+        },
+        {
+            xtype: 'textarea',
+            fieldLabel: 'Addtl Information',
+            bind: '{record.additional_information}',
+            grow: true
+        }];
+
+        me.callParent();
+
+        var record = Ext.ux.mantis.model.Ticket.create({
+            project: me.options.project_id,
+            category: me.options.defaultTicketValues ? me.options.defaultTicketValues.category : 1,
+            priority: me.options.defaultTicketValues ? me.options.defaultTicketValues.priority : 30,
+            reproducibility: me.options.defaultTicketValues ? me.options.defaultTicketValues.reproducibility : 70,
+            severity: me.options.defaultTicketValues ? me.options.defaultTicketValues.severity : 50//,
+            //version: Ext.manifest.version
+        });
+        record.appOptions = me.options;
+
+        me.getViewModel().set('record', record);
     },
-    {
-        xtype: 'textarea',
-        fieldLabel: 'Description',
-        bind: '{record.description}',
-        grow: true
-    },
-    {
-        xtype: 'textarea',
-        fieldLabel: 'Steps to Reproduce',
-        bind: '{record.steps_to_reproduce}',
-        grow: true
-    },
-    {
-        xtype: 'textarea',
-        fieldLabel: 'Addtl Information',
-        bind: '{record.additional_information}',
-        grow: true
-    }],
     
     buttons: [
     {

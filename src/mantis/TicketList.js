@@ -17,13 +17,12 @@ Ext.define('Ext.ux.mantis.TicketList',
     flex: 1,
     scrollable: true,
     bodyPadding: '5 5 5 5',
-    reference: 'ticketList',
 
     config:
     {
         store: null,
-        params: {},
-        myTicketList: false
+        options: {},
+        params: {}
     },
 
     style:
@@ -137,28 +136,29 @@ Ext.define('Ext.ux.mantis.TicketList',
     {
         var me = this;
 
-        if (!Ext.manifest.mantis.token) {
+        if (!me.getOptions().token) {
             if (me.logger) {
                 me.logger.error("Invalid token");
             }
             return null;
         }
 
-        if (!Ext.manifest.mantis.project_id) {
+        if (!me.getOptions().project_id) {
             if (me.logger) {
                 me.logger.error("Invalid project");
             }
             return null;
         }
         
-        var store = Ext.create('Ext.ux.mantis.store.Tickets');
+        var store = Ext.create('Ext.ux.mantis.store.Tickets',
+        {
+            options: me.getOptions()
+        });
         
         //
         // If the token is specified at runtime, we need to reset proxy authorization
         //
-        var proxy = store.getProxy();
-        proxy.setHeaders({ Authorization: Ext.manifest.mantis.token });
-        proxy.setExtraParams(Ext.merge({ project_id: Ext.manifest.mantis.project_id }, me.getParams() ? me.getParams() : {}));
+        store.getProxy().setExtraParams(me.getParams());
 
         return store;
     },
@@ -168,14 +168,14 @@ Ext.define('Ext.ux.mantis.TicketList',
         var me = this;
         var deferred = new Ext.Deferred();
 
-        if (!Ext.manifest.mantis.token) {
+        if (!me.getOptions().token) {
             if (me.logger) {
                 me.logger.error("Invalid token");
             }
             return Ext.Deferred.reject("Invalid token");
         }
 
-        if (!Ext.manifest.mantis.project_id) {
+        if (!me.getOptions().project_id) {
             if (me.logger) {
                 me.logger.error("Invalid project");
             }
@@ -186,8 +186,8 @@ Ext.define('Ext.ux.mantis.TicketList',
         {
             scope: this,
             method: 'GET',
-            url: Ext.manifest.mantis.location + 'plugins/ApiExtend/api/issues/count/' + Ext.manifest.mantis.project_name,
-            headers: { Authorization: Ext.manifest.mantis.token },
+            url: me.getOptions().location + 'plugins/ApiExtend/api/issues/count/' + me.getOptions().project_name,
+            headers: { Authorization: me.getOptions().token },
             failure: function(response, options)
             {
                 deferred.reject('Could not execute Mantis Rest API for getTicketCount()');
@@ -213,7 +213,11 @@ Ext.define('Ext.ux.mantis.TicketList',
                 //
                 deferred.resolve(jso.count);
             },
-            params: Ext.merge({ project_id: Ext.manifest.mantis.project_id, hide_status:-2 }, me.getParams() ? me.getParams() : {})
+            params: Ext.merge(
+            { 
+                project_id: me.getOptions().project_id,
+                hide_status:-2
+            }, me.getParams() ? me.getParams() : {})
         });
 
         return deferred.promise;
