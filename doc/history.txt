@@ -388,3 +388,48 @@ January 24th, 2020
     'version' config is bound to a data property of the owning component's view
     model.
 
+
+Version 1.5.0
+April 24th, 2020
+-------------------------------------------------------------------------------
+********************************************************************************
+***                                                                            *
+*** Verify that the following requirements have been satisfied:                *
+***                                                                            *
+*** Requirements:                                                              *
+*** -------------                                                              *
+***                                                                            *
+***    1.  Operating System            : Windows 7+                            * 
+***                                                                            *
+***    2.  CPU                         : 1.0+ GHz                              *
+***                                                                            *
+***    3.  RAM                         : 128 MB                                *
+***                                                                            *
+***    4.  ExtJS Core                  : 6.7+                                  *
+***                                                                            *
+********************************************************************************
+
+1.  Feature:  General
+    
+    Add support for multiple backend sites in one app.
+    
+    To achieve this functionality, the 'mantis' config object previously read
+    from the applications app.json manifest should now be passed as a config
+    object to the view components:
+    
+        Ext.ux.mantis.Changelog
+        Ext.ux.mantis.Tickets
+    
+    [Fixes #1954]
+
+2.  Bug Fix:  Ticketing
+    
+    All fields get cleared after submitting a ticket.
+    
+    [Fixes #1955]
+
+3.  Visual Enhancement
+    
+    Add mantis logo to 'Ext.ux.mantis.NewTicket' for both visual indentification
+    of integration with the mantis system and compliance with the GPL.
+

@@ -1,7 +1,7 @@
 {
     "name": "@perryjohnson/extjs-pkg-mantis",
     "description": "ExtJS Package Wrapper for Mantis BugTracker",
-    "version": "1.4.2",
+    "version": "1.5.0",
     "license": "MIT",
     "author": {
         "name": "Scott Meesseman"
@@ -54,8 +54,8 @@
         },
         "resources": [
             {
-              "path": "${package.dir}/resources",
-              "output": "shared"
+                "path": "${package.dir}/resources",
+                "output": "shared"
             }
         ],
         "classic": {
