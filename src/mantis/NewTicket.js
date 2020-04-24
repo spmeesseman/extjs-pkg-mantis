@@ -152,6 +152,7 @@ Ext.define('Ext.ux.mantis.NewTicket',
             xtype: 'textarea',
             fieldLabel: 'Description',
             bind: '{record.description}',
+            allowBlank: false,
             grow: true
         },
         {
@@ -177,7 +178,7 @@ Ext.define('Ext.ux.mantis.NewTicket',
             severity: me.options.defaultTicketValues ? me.options.defaultTicketValues.severity : 50
         };
 
-        var record = Ext.ux.mantis.model.Ticket.create(me.newRecordOptions);
+        var record = Ext.ux.mantis.model.Ticket.create(Ext.clone(me.newRecordOptions));
         record.appOptions = me.options;
 
         me.getViewModel().set('record', record);
@@ -188,9 +189,13 @@ Ext.define('Ext.ux.mantis.NewTicket',
         text: 'Clear',
         handler: function(btn)
         {
-            var newticket = btn.up('newticket');
-            btn.up('newticket').getViewModel().set('record', Ext.ux.mantis.model.Ticket.create(newticket.newRecordOptions));
-            //btn.up('newticket').down('textfield').focus();
+            var newticket = btn.up('newticket'),
+                vm = btn.up('newticket').getViewModel();
+            vm.get('record').drop();
+            vm.get('record').destroy();
+            var record = Ext.ux.mantis.model.Ticket.create(Ext.clone(newticket.newRecordOptions));
+            record.appOptions = newticket.options;
+            vm.set('record', record);
         }
     },
     {
@@ -199,39 +204,32 @@ Ext.define('Ext.ux.mantis.NewTicket',
         {
             var newticket = btn.up('newticket');
             var rec = newticket.getViewModel().get('record');
-            var mask = ToolkitUtils.mask(newticket, "Submitting ticket");
+            var mask = new Ext.LoadMask(
+            {
+                target: newticket,
+                msg: "Submitting ticket"
+            });
             rec.save(
             {
                 scope: this,
                 failure: function(record, operation) 
                 {
-                    ToolkitUtils.unmask(mask);
+                    mask.hide();
+                    mask.destroy();
                     Ext.Msg.alert("Request Failed", "Failed to submit new ticket");
                 },
                 success: function(record, operation) 
                 {
-                    ToolkitUtils.unmask(mask);
+                    mask.hide();
+                    mask.destroy();
                     Ext.toast("Ticket #" + record.getId() + " submitted successfully");
-                    btn.up('newticket').getViewModel().set('record', Ext.ux.mantis.model.Ticket.create(newticket.newRecordOptions));
+                    var newRec = Ext.ux.mantis.model.Ticket.create(Ext.clone(newticket.newRecordOptions));
+                    newRec.appOptions = newticket.options;
+                    btn.up('newticket').getViewModel().set('record', newRec);
                     //btn.up('newticket').down('textfield').focus();
                 }
             });
         }
-    }],
+    }]
 
-    clearValues: function()
-    {
-        var cmps = this.query('textfield');
-        for (var c in cmps) {
-            if (cmps[c].getXType() == 'combobox') {
-                continue;
-            }
-            cmps[c].setValue('');
-        }
-        cmps = this.query('textarea');
-        for (var c2 in cmps) {
-            cmps[c2].setValue('');
-        }
-    }
-    
 });
