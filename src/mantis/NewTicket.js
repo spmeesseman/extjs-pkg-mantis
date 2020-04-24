@@ -169,14 +169,15 @@ Ext.define('Ext.ux.mantis.NewTicket',
 
         me.callParent();
 
-        var record = Ext.ux.mantis.model.Ticket.create({
+        me.newRecordOptions = {
             project: me.options.project_id,
             category: me.options.defaultTicketValues ? me.options.defaultTicketValues.category : 1,
             priority: me.options.defaultTicketValues ? me.options.defaultTicketValues.priority : 30,
             reproducibility: me.options.defaultTicketValues ? me.options.defaultTicketValues.reproducibility : 70,
-            severity: me.options.defaultTicketValues ? me.options.defaultTicketValues.severity : 50//,
-            //version: Ext.manifest.version
-        });
+            severity: me.options.defaultTicketValues ? me.options.defaultTicketValues.severity : 50
+        };
+
+        var record = Ext.ux.mantis.model.Ticket.create(me.newRecordOptions);
         record.appOptions = me.options;
 
         me.getViewModel().set('record', record);
@@ -187,7 +188,8 @@ Ext.define('Ext.ux.mantis.NewTicket',
         text: 'Clear',
         handler: function(btn)
         {
-            btn.up('newticket').getViewModel().set('record', Ext.ux.mantis.model.Ticket.create());
+            var newticket = btn.up('newticket');
+            btn.up('newticket').getViewModel().set('record', Ext.ux.mantis.model.Ticket.create(newticket.newRecordOptions));
             //btn.up('newticket').down('textfield').focus();
         }
     },
@@ -210,7 +212,7 @@ Ext.define('Ext.ux.mantis.NewTicket',
                 {
                     ToolkitUtils.unmask(mask);
                     Ext.toast("Ticket #" + record.getId() + " submitted successfully");
-                    btn.up('newticket').getViewModel().set('record', Ext.ux.mantis.model.Ticket.create());
+                    btn.up('newticket').getViewModel().set('record', Ext.ux.mantis.model.Ticket.create(newticket.newRecordOptions));
                     //btn.up('newticket').down('textfield').focus();
                 }
             });
