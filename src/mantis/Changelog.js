@@ -113,12 +113,12 @@ Ext.define('Ext.ux.mantis.Changelog',
                 //
                 MantisUtils.buildVersionCache(panel.getOptions())
                 .then(function(cache)
-                {
-                    //
+                {   //
                     // Now get changelog for the current version
                     //
                     vm.set('versions', cache);
-                    return panel.getChangeLog();
+                    vm.notify(); // Ext7.2 - we now need to call notifiy() so 'versionArrays' will update
+                    return panel.getChangeLog(); 
                 })
                 .then(function(cache)
                 {
@@ -215,16 +215,17 @@ Ext.define('Ext.ux.mantis.Changelog',
         var me = this;
         var vm = me.getViewModel();
         //
-        // Default to current extjs version if not set in vm
-        //
-        if (!me.getVersion() && vm.get('versionArrays')[0]) {
-            me.setVersion(Ext.manifest.version); 
-        }
-        //
         // Get changelog for the version set in the view model
         //
         return new Ext.Promise(function(resolve, reject)
         {
+            //
+            // Default to current extjs version if not set in vm
+            //
+            if (!me.getVersion() && vm.get('versionArrays')[0]) {
+                me.setVersion(Ext.manifest.version); 
+            }
+            
             var mask = ToolkitUtils.mask(me, 'Loading mantis changelog');
             MantisUtils.getChangeLog(me.getVersion(), me.getOptions())
             .then((content) =>

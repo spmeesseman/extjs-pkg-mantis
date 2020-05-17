@@ -12,7 +12,6 @@ Ext.define('Ext.ux.mantis.Utils',
         //
         // Build utility version cache
         //
-    
         return new Ext.Promise(function(resolve, reject)
         {
             if (!options.token || !options.location || !options.project_name)
@@ -94,7 +93,7 @@ Ext.define('Ext.ux.mantis.Utils',
             for (var v in MantisUtils.versionCache)
             {
                 if (MantisUtils.versionCache[v] === version) { // version are sorted newest to oldest
-                    var vn = parseInt(v) + 1;
+                    var vn = parseInt(v, 10) + 1;
                     if (vn < MantisUtils.versionCache.length) {
                         return MantisUtils.versionCache[vn];
                     }
