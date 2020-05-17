@@ -44,6 +44,11 @@ Ext.define('Ext.ux.mantis.NewTicket',
         pack  : 'start'
     },
     
+    defaults:
+    {
+        labelWidth: 110
+    },
+    
     initComponent: function()
     {
         var me = this;
@@ -62,7 +67,8 @@ Ext.define('Ext.ux.mantis.NewTicket',
                 },
                 defaults:
                 {
-                    flex :1
+                    flex :1,
+                    labelWidth: 110
                 },
                 items: [
                 {
@@ -87,7 +93,7 @@ Ext.define('Ext.ux.mantis.NewTicket',
                 },
                 {
                     xtype: 'combo',
-                    fieldLabel: 'Reproducibility',
+                    fieldLabel: '<i class="fal fa-spinner fa-spin"></i> Reproducibility',
                     displayField:'label',
                     valueField:'id',
                     editable: false,
@@ -108,7 +114,7 @@ Ext.define('Ext.ux.mantis.NewTicket',
                 },
                 {
                     xtype: 'combo',
-                    fieldLabel: 'Severity',
+                    fieldLabel: '<i class="fal fa-spinner fa-spin"></i> Severity',
                     displayField:'label',
                     valueField:'id',
                     editable: false,
@@ -129,7 +135,7 @@ Ext.define('Ext.ux.mantis.NewTicket',
                 },
                 {
                     xtype: 'combo',
-                    fieldLabel: 'Priority',
+                    fieldLabel: '<i class="fal fa-spinner fa-spin"></i> Priority',
                     displayField:'label',
                     valueField:'id',
                     editable: false,
@@ -155,7 +161,10 @@ Ext.define('Ext.ux.mantis.NewTicket',
                 src: Ext.manifest.resources.base + '/resources/mantis/mantisbt.png',
                 height: 116,
                 width: 116,
-                padding: 10
+                padding: 10,
+                style: {
+                    opacity: '0.7'
+                }
             }]
         },
         {
