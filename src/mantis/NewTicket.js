@@ -67,7 +67,7 @@ Ext.define('Ext.ux.mantis.NewTicket',
                 items: [
                 {
                     xtype: 'combo',
-                    fieldLabel: 'Category',
+                    fieldLabel: '<i class="fal fa-spinner fa-spin"></i> Category',
                     displayField:'name',
                     valueField:'id',
                     editable: false,
@@ -76,7 +76,13 @@ Ext.define('Ext.ux.mantis.NewTicket',
                     store:
                     {
                         type: 'mantis.categories',
-                        options: me.options
+                        options: me.options,
+                        listeners: {
+                            load: function() {
+                                var cmb = me.down('combo');
+                                cmb.setFieldLabel(cmb.getFieldLabel().replace('<i class="fal fa-spinner fa-spin"></i>', ''));
+                            }
+                        }
                     }
                 },
                 {
@@ -91,7 +97,13 @@ Ext.define('Ext.ux.mantis.NewTicket',
                     {
                         type: 'mantis.fieldstore',
                         model: 'Ext.ux.mantis.model.Reproducibility',
-                        options: me.options
+                        options: me.options,
+                        listeners: {
+                            load: function() {
+                                var cmb = me.down('combo').next('combo');
+                                cmb.setFieldLabel(cmb.getFieldLabel().replace('<i class="fal fa-spinner fa-spin"></i>', ''));
+                            }
+                        }
                     }
                 },
                 {
@@ -106,7 +118,13 @@ Ext.define('Ext.ux.mantis.NewTicket',
                     {
                         type: 'mantis.fieldstore',
                         model: 'Ext.ux.mantis.model.Severity',
-                        options: me.options
+                        options: me.options,
+                        listeners: {
+                            load: function() {
+                                var cmb = me.down('combo').next('combo').next('combo');
+                                cmb.setFieldLabel(cmb.getFieldLabel().replace('<i class="fal fa-spinner fa-spin"></i>', ''));
+                            }
+                        }
                     }
                 },
                 {
@@ -122,7 +140,13 @@ Ext.define('Ext.ux.mantis.NewTicket',
                         type: 'mantis.fieldstore',
                         model: 'Ext.ux.mantis.model.Priority',
                         options: me.options,
-                        xtraParams: { option: 'priority_enum_string' }
+                        xtraParams: { option: 'priority_enum_string' },
+                        listeners: {
+                            load: function() {
+                                var cmb = me.down('combo').next('combo').next('combo').next('combo');
+                                cmb.setFieldLabel(cmb.getFieldLabel().replace('<i class="fal fa-spinner fa-spin"></i>', ''));
+                            }
+                        }
                     }
                 }]
             },
