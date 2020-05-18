@@ -433,3 +433,42 @@ April 24th, 2020
     Add mantis logo to 'Ext.ux.mantis.NewTicket' for both visual indentification
     of integration with the mantis system and compliance with the GPL.
 
+
+Version 1.5.1
+May 18th, 2020
+-------------------------------------------------------------------------------
+********************************************************************************
+***                                                                            *
+*** Verify that the following requirements have been satisfied:                *
+***                                                                            *
+*** Requirements:                                                              *
+*** -------------                                                              *
+***                                                                            *
+***    1.  Operating System            : Windows 7+                            * 
+***                                                                            *
+***    2.  CPU                         : 1.0+ GHz                              *
+***                                                                            *
+***    3.  RAM                         : 128 MB                                *
+***                                                                            *
+***    4.  ExtJS Core                  : 6.7+                                  *
+***                                                                            *
+********************************************************************************
+
+1.  Bug Fix:  Changelog
+    
+    ExtJs7.2 breaks the changelog window, and an error occurs when instantiating
+    the 'tickets' component:
+    
+        An error has occurred:  undefined
+
+2.  UI Enhancement:  New Ticket
+    
+    Currently, the ticket category, reproducibility, severity and priority
+    dropdowns are auto populated when a new 'ticket' component is created, but
+    with no indication to the user that something is loading to be populated.
+
+    Display loading spinners in the field labels while the dropdowns are 
+    loading to indicate to the user that the application is working to populate
+    these fields.
+    
+
