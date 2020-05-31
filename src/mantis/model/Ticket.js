@@ -75,14 +75,60 @@ Ext.define('Ext.ux.mantis.model.Ticket',
             return false;
         }
         
-        if (me.phantom) {
+        if (me.phantom)
+        {
+            var fields = me.appOptions.defaultTicketValues.custom_fields || [],
+                xtypes = me.appOptions.custom_fields_xtype;
+
             me.set('created_at', new Date());
             me.set('project', { id: me.appOptions.project_id });
+
             if (!me.appOptions.noVersion) {
                 me.set('version', { name: me.getVersion() });
             }
-            if (me.appOptions.defaultTicketValues.custom_fields) {
-                me.set('custom_fields', me.appOptions.defaultTicketValues.custom_fields);
+
+            if (xtypes)
+            {
+                if (!Ext.isArray(xtypes)) {
+                    xtypes = [ xtypes ];
+                }
+                for (var x in xtypes)
+                {
+                    var cmp = Ext.getCmp(xtypes[x].id);
+                    if (cmp)
+                    {
+                        var v = cmp.getValue();
+                        if (v === true) {
+                            v = "Yes";
+                        }
+                        else if (v === false) {
+                            v = "No";
+                        }
+                        if (v || v == "0")
+                        {
+                            var exists = false;
+                            for (var f in fields) {
+                                if (fields[f].field.name === xtypes[x].fieldLabel) {
+                                    fields[f].value = v;
+                                    exists = true;
+                                    break;
+                                }
+                            }
+                            if (!exists) {
+                                fields.push({
+                                    field: {
+                                        name: xtypes[x].fieldLabel
+                                    },
+                                    value: v
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (fields) {
+                me.set('custom_fields', fields);
             }
         }
 

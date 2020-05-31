@@ -16,7 +16,7 @@ Ext.define('Ext.ux.mantis.TicketList',
     //border: true,
     flex: 1,
     scrollable: true,
-    bodyPadding: '5 5 5 5',
+    bodyPadding: '10 10 10 10',
 
     config:
     {

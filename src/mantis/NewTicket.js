@@ -21,8 +21,9 @@ Ext.define('Ext.ux.mantis.NewTicket',
     
     flex:1,
     border:false,
-    bodyPadding: '5 5 5 5',
-    
+    bodyPadding: '10 10 10 10',
+    scrollable: true,
+
     config:
     {
         options: {}
@@ -166,7 +167,19 @@ Ext.define('Ext.ux.mantis.NewTicket',
                     opacity: '0.7'
                 }
             }]
-        },
+        }];
+
+        var xtypes = me.options.custom_fields_xtype;
+        if (xtypes) {
+            if (Ext.isArray(xtypes)) {
+                me.items.push(...xtypes);
+            }
+            else if (Ext.isObject(xtypes)) {
+                me.items.push(xtypes);
+            }
+        }
+
+        me.items.push(...[
         {
             xtype: 'textfield',
             fieldLabel: 'Summary',
@@ -199,7 +212,7 @@ Ext.define('Ext.ux.mantis.NewTicket',
             fieldLabel: 'Addtl Information',
             bind: '{record.additional_information}',
             grow: true
-        }];
+        }]);
 
         me.callParent();
 
@@ -217,6 +230,37 @@ Ext.define('Ext.ux.mantis.NewTicket',
         me.getViewModel().set('record', record);
     },
     
+    clearFieldsCustom: function()
+    {
+        var me = this,
+            xtypes = me.options.custom_fields_xtype,
+            cmps = me.query('field');
+
+        if (xtypes)
+        {
+            if (!Ext.isArray(xtypes)) {
+                xtypes = [ xtypes ];
+            }
+            for (var x in xtypes) {
+                var cmp = Ext.getCmp(xtypes[x].id);
+                if (cmp) {
+                    if (cmp.clearValue) {
+                        cmp.clearValue();
+                    }
+                    if (cmp.clearInvalid) {
+                        cmp.clearInvalid();
+                    }
+                }
+            }
+        }
+
+        for (var c in cmps) {
+            if (cmps[c].clearInvalid) {
+                cmps[c].clearInvalid();
+            }
+        }
+    },
+
     buttons: [
     {
         text: 'Clear',
@@ -229,6 +273,7 @@ Ext.define('Ext.ux.mantis.NewTicket',
             var record = Ext.ux.mantis.model.Ticket.create(Ext.clone(newticket.newRecordOptions));
             record.appOptions = newticket.options;
             vm.set('record', record);
+            newticket.clearFieldsCustom();
         }
     },
     {
@@ -260,6 +305,7 @@ Ext.define('Ext.ux.mantis.NewTicket',
                     newRec.appOptions = newticket.options;
                     btn.up('newticket').getViewModel().set('record', newRec);
                     //btn.up('newticket').down('textfield').focus();
+                    newticket.clearFieldsCustom();
                 }
             });
         }
