@@ -16,12 +16,14 @@ Ext.define('Ext.ux.mantis.Tickets',
     flex:1,
     border: false,
     
-    options: {
+    options:
+    {
         project_id: 1,
         project_name: "",
         token: "",
         versionIsPatchX: false,
         location: "",
+        cb: null,
         defaultTicketValues:
         {
             priority: 30,

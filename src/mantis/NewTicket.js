@@ -282,32 +282,60 @@ Ext.define('Ext.ux.mantis.NewTicket',
         text: 'Submit',
         handler: function(btn)
         {
-            var newticket = btn.up('newticket');
-            var rec = newticket.getViewModel().get('record');
+            var newticket = btn.up('newticket'),
+                rec = newticket.getViewModel().get('record');
+
             var mask = new Ext.LoadMask(
             {
                 target: newticket,
                 msg: "Submitting ticket"
             });
+
             rec.save(
             {
                 scope: this,
+                
                 failure: function(record, operation) 
                 {
                     mask.hide();
                     mask.destroy();
+
                     Ext.Msg.alert("Request Failed", "Failed to submit new ticket");
                 },
+
                 success: function(record, operation) 
                 {
                     mask.hide();
                     mask.destroy();
+
                     Ext.toast("Ticket #" + record.getId() + " submitted successfully");
+
                     var newRec = Ext.ux.mantis.model.Ticket.create(Ext.clone(newticket.newRecordOptions));
                     newRec.appOptions = newticket.options;
                     btn.up('newticket').getViewModel().set('record', newRec);
                     //btn.up('newticket').down('textfield').focus();
+
                     newticket.clearFieldsCustom();
+
+                    //
+                    // Call application callback hook if defined
+                    //
+                    var fno = newticket.options.cb ? newticket.options.cb.newTicket : null;
+                    if (fno)
+                    {
+                        if (Ext.isFunction(fno)) {
+                            fno(record, newticket);
+                        }
+                        else if (Ext.isOject(fno) && fno.fn)
+                        {
+                            if (!fno.fn.scope) {
+                                fn.fn(record, newticket);
+                            }
+                            else {
+                                fno.fn.call(fn.scope, record, newticket);
+                            }
+                        }
+                    }
                 }
             });
         }
