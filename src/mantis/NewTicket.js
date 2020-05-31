@@ -254,11 +254,13 @@ Ext.define('Ext.ux.mantis.NewTicket',
             }
         }
 
-        for (var c in cmps) {
-            if (cmps[c].clearInvalid) {
-                cmps[c].clearInvalid();
+        new Ext.util.DelayedTask(function() {
+            for (var c in cmps) {
+                if (cmps[c].clearInvalid) {
+                    cmps[c].clearInvalid();
+                }
             }
-        }
+        }).delay(1);
     },
 
     buttons: [
