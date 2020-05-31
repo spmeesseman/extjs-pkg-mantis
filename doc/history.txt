@@ -472,3 +472,77 @@ May 18th, 2020
     these fields.
     
 
+
+Version 1.6.0
+May 31st, 2020
+-------------------------------------------------------------------------------
+********************************************************************************
+***                                                                            *
+*** Verify that the following requirements have been satisfied:                *
+***                                                                            *
+*** Requirements:                                                              *
+*** -------------                                                              *
+***                                                                            *
+***    1.  Operating System            : Windows 7+                            * 
+***                                                                            *
+***    2.  CPU                         : 1.0+ GHz                              *
+***                                                                            *
+***    3.  RAM                         : 128 MB                                *
+***                                                                            *
+***    4.  ExtJS Core                  : 6.7+                                  *
+***                                                                            *
+********************************************************************************
+
+1.  Feature:  New Ticket
+    
+    Add a callback hook function for calling after submittal of a new ticket.
+    
+    The following new property can be set in the options object to hook the
+    ticket post-submittal:
+    
+        cb
+    
+    The 'cb' property can be a function, or an object specifying a scope and a
+    function.  The object can be defined as follows:
+    
+        cb: {
+            scope: this,
+            fn: Ext.emptyFn
+        }
+
+2.  Feature:  New Ticket
+    
+    Add support for adding custom ticket fields.
+    
+    To insert custom fields into the ticket form, define the following property
+    in the 'options' config object:
+    
+        custom_fields_xtype
+    
+    For example:
+    
+        options: {
+            ...
+            custom_fields_xtype:
+            {
+                id: 'extjs-cstf-field1',
+                xtype: 'textfield',
+                fieldLabel: 'Custom Field'
+            }
+        }
+    
+    Note that the value for the 'fieldLabel' property must match the custom field
+    name in MantisBT, and the definition must contain a statically defined 'id'
+    property.
+
+3.  Bug Fix:  New Ticket
+    
+    The ticket view should be masked when submitting new ticket.
+    
+    [Fixes #1994]
+
+4.  Refactoring:  New Ticket
+    
+    After submitting a new ticket, the form is cleared, but all fields are then
+    marked invalid.
+
