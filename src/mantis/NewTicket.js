@@ -289,7 +289,7 @@ Ext.define('Ext.ux.mantis.NewTicket',
             {
                 target: newticket,
                 msg: "Submitting ticket"
-            });
+            }).show();
 
             rec.save(
             {
@@ -315,8 +315,6 @@ Ext.define('Ext.ux.mantis.NewTicket',
                     btn.up('newticket').getViewModel().set('record', newRec);
                     //btn.up('newticket').down('textfield').focus();
 
-                    newticket.clearFieldsCustom();
-
                     //
                     // Call application callback hook if defined
                     //
@@ -326,16 +324,21 @@ Ext.define('Ext.ux.mantis.NewTicket',
                         if (Ext.isFunction(fno)) {
                             fno(record, newticket);
                         }
-                        else if (Ext.isOject(fno) && fno.fn)
+                        else if (Ext.isObject(fno) && fno.fn)
                         {
-                            if (!fno.fn.scope) {
-                                fn.fn(record, newticket);
+                            if (!fno.scope) {
+                                fno.fn(record, newticket);
                             }
                             else {
-                                fno.fn.call(fn.scope, record, newticket);
+                                fno.fn.call(fno.scope, record, newticket);
                             }
                         }
                     }
+
+                    //
+                    // Clear fields and place a new phantom model into the viewModel
+                    //
+                    newticket.clearFieldsCustom();
                 }
             });
         }
