@@ -8,6 +8,7 @@ Ext.define('Ext.ux.mantis.Changelog',
     xtype: 'mantischangelog',
     
     require: [
+        'Ext.ux.mantis.Utils'
     ],
     
     reference: 'mantischangelog',
@@ -106,7 +107,7 @@ Ext.define('Ext.ux.mantis.Changelog',
             Ext.create('Ext.util.DelayedTask', function()
             {
                 var vm = panel.getViewModel();
-                var mask = ToolkitUtils.mask(panel, 'Loading mantis changelog');
+                var mask = MantisUtils.mask(panel, 'Loading mantis changelog');
 
                 //
                 // Build utility version cache first
@@ -122,11 +123,11 @@ Ext.define('Ext.ux.mantis.Changelog',
                 })
                 .then(function(cache)
                 {
-                    ToolkitUtils.unmask(mask);
+                    MantisUtils.unmask(mask);
                 })
                 .catch(function(obj)
                 {
-                    ToolkitUtils.unmask(mask);
+                    MantisUtils.unmask(mask);
                     Utils.alertError("Error retrieving changelog<br><br>" + obj.reason);
                 });
             }, panel).delay(100);
@@ -226,7 +227,7 @@ Ext.define('Ext.ux.mantis.Changelog',
                 me.setVersion(Ext.manifest.version); 
             }
             
-            var mask = ToolkitUtils.mask(me, 'Loading mantis changelog');
+            var mask = MantisUtils.mask(me, 'Loading mantis changelog');
             MantisUtils.getChangeLog(me.getVersion(), me.getOptions())
             .then((content) =>
             {
@@ -234,7 +235,7 @@ Ext.define('Ext.ux.mantis.Changelog',
                 resolve();
             })
             .catch((obj) => { reject(obj); })
-            .finally(() =>  { ToolkitUtils.unmask(mask); });
+            .finally(() =>  { MantisUtils.unmask(mask); });
         });
     }
     

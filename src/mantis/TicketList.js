@@ -9,6 +9,7 @@ Ext.define('Ext.ux.mantis.TicketList',
     
     requires: [ 
         'Ext.ux.mantis.Ticket',
+        'Ext.ux.mantis.Utils',
         'Ext.ux.mantis.store.Tickets',
         Ext.platformTags.desktop ? 'Ext.toolbar.Paging' : 'Ext.grid.PagingToolbar'
     ],
@@ -88,13 +89,13 @@ Ext.define('Ext.ux.mantis.TicketList',
     refreshPage: function(store)
     {
         var me = this;
-        var mask = ToolkitUtils.mask(me, "Retrieving tickets");
+        var mask = MantisUtils.mask(me, "Retrieving tickets");
 
         store.getTotalCount = function() { return 0; };
         me.getTicketCount().then(function(count)
         {
             if (count == 0) {
-                ToolkitUtils.unmask(mask);
+                MantisUtils.unmask(mask);
                 me.load = false;
                 me.removeAll();
                 return;
@@ -105,7 +106,7 @@ Ext.define('Ext.ux.mantis.TicketList',
             {
                 callback: function(records, options, success) 
                 {
-                    ToolkitUtils.unmask(mask);
+                    MantisUtils.unmask(mask);
                     me.load = false;
                     me.removeAll();
                     if (!success) {
@@ -129,7 +130,7 @@ Ext.define('Ext.ux.mantis.TicketList',
                     me.updateLayout();
                 }
             });
-        }, function(e) { ToolkitUtils.unmask(mask); me.load = false; Utils.alertError(e); });
+        }, function(e) { MantisUtils.unmask(mask); me.load = false; Utils.alertError(e); });
     },
 
     getTicketStore: function()

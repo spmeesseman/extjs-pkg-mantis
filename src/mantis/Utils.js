@@ -7,6 +7,12 @@ Ext.define('Ext.ux.mantis.Utils',
 
     versionCache: null,
 
+    privates:
+    {
+        current_mask: null
+    },
+
+
     buildVersionCache: function(options)
     {
         //
@@ -159,5 +165,63 @@ Ext.define('Ext.ux.mantis.Utils',
                 reject(response);
             });
         });
+    },
+
+
+    mask: function(cmp, msg, store)
+    {
+        var me = this;
+        var mask = null;
+        
+        if (!cmp) {
+            return mask;
+        }
+
+        if (!msg) {
+            msg = 'Loading...';
+        }
+        
+        mask = new Ext.LoadMask(
+        {
+            target: cmp ? cmp : Ext.ComponentQuery.query('app-main')[0],
+            msg: msg
+        });
+        
+        if (mask)
+        {
+            mask.show();
+            me.current_mask = mask;
+        }
+
+        return mask;
+    },
+
+
+    unmask: function(mask)
+    {
+        var me = this;
+        //
+        // Add try/catch - 
+        // Reference ticket #1273:  Client Error - Cannot read property 'removeCls' of null
+        // When calling hide(), this exception is randomly triggered.  Probably on windows that
+        // are masked and closed around same time race condition??
+        //
+        try
+        {
+            if (mask && mask.target)
+            {
+                mask.hide();
+                mask.destroy();
+            }
+            else if (me.current_mask && me.current_mask.target)
+            {
+                me.current_mask.hide();
+                me.current_mask.destroy();
+            }
+        }
+        catch(e) {}
+
+        me.current_mask = null;
     }
+
 });
