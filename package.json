@@ -1,7 +1,7 @@
 {
     "name": "@perryjohnson/extjs-pkg-mantis",
     "description": "ExtJS Package Wrapper for Mantis BugTracker",
-    "version": "1.6.2",
+    "version": "1.6.3",
     "license": "MIT",
     "author": {
         "name": "Scott Meesseman"
