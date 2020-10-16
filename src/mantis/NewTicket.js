@@ -224,10 +224,11 @@ Ext.define('Ext.ux.mantis.NewTicket',
             severity: me.options.defaultTicketValues ? me.options.defaultTicketValues.severity : 50
         };
 
-        var record = Ext.ux.mantis.model.Ticket.create(Ext.clone(me.newRecordOptions));
+        var vm = me.getViewModel(),
+            record = vm.get('record') ? vm.get('record') : Ext.ux.mantis.model.Ticket.create();
+        record.set(Ext.clone(me.newRecordOptions));
         record.appOptions = me.options;
-
-        me.getViewModel().set('record', record);
+        vm.set('record', record);
     },
     
     clearFieldsCustom: function()
