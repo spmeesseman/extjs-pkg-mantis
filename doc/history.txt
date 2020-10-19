@@ -623,3 +623,30 @@ September 28th, 2020
     Version dropdown does not show full selected text when using the Triton
     theme.
 
+
+Version 1.6.4
+October 18th, 2020
+-------------------------------------------------------------------------------
+********************************************************************************
+***                                                                            *
+*** Verify that the following requirements have been satisfied:                *
+***                                                                            *
+*** Requirements:                                                              *
+*** -------------                                                              *
+***                                                                            *
+***    1.  Operating System            : Windows 7+                            * 
+***                                                                            *
+***    2.  CPU                         : 1.0+ GHz                              *
+***                                                                            *
+***    3.  RAM                         : 128 MB                                *
+***                                                                            *
+***    4.  ExtJS Core                  : 6.7+                                  *
+***                                                                            *
+********************************************************************************
+
+1.  Bug Fix: New Ticket
+    
+    When passing a record into the view model, the summary and description field
+    values are not applied to the respective textarea controls of the ticket
+    form.
+
