@@ -183,7 +183,7 @@ Ext.define('Ext.ux.mantis.NewTicket',
         {
             xtype: 'textfield',
             fieldLabel: 'Summary',
-            maxlength: 64,
+            maxlength: 96,
             bind: '{record.summary}',
             allowBlank: false,
             listeners:
