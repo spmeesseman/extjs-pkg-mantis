@@ -4,7 +4,7 @@
  */
 Ext.define('Ext.ux.mantis.TicketDetail', 
 {
-    extend: 'Ext.panel.Panel',
+    extend: 'Ext.Panel',
     xtype: 'ticketdetail',
     
     requires: [
@@ -18,11 +18,8 @@ Ext.define('Ext.ux.mantis.TicketDetail',
     cls: 'mantis-ticket-list-ticket-detail',
     iconCls: 'far fa-ticket-alt',
 
-    viewModel: 
-    {
-        data: {
-            record: null
-        }
+    config: {
+        record: null
     },
 
     layout: 
@@ -32,102 +29,104 @@ Ext.define('Ext.ux.mantis.TicketDetail',
         pack  : 'start'
     },
     
-    items: [
+    initComponent: function()
     {
-        xtype: 'ticketheader'
-    },
-    {
-        cls: 'mantis-ticket-list-ticket-summary mantis-text-shadow-letterpress',
-        bind: 
+        var record = this.getRecord();
+        this.items = [
         {
-            html: '{record.summary}'
-        }
-    },
-    {
-        cls: 'mantis-ticket-list-ticket-description',
-        margin: '10 0 0 0',
-        bind: 
+            xtype: 'ticketheader',
+            record: record,
+            margin: '5 0 0 0',
+            defaults: {
+                bodyStyle: {
+                    'font-size': '22px'
+                }
+            }
+        },
         {
-            html: '{record.description}'
-        }
-    },
-    {
-        cls: 'mantis-ticket-list-ticket-description',
-        margin: '10 0 0 0',
-        bind: 
+            cls: 'mantis-ticket-list-ticket-summary mantis-text-shadow-letterpress',
+            margin: '15 0 0 0',
+            html: record ? record.get('summary') : ''
+        },
         {
-            hidden: '{!record.steps_to_reproduce}',
-            html: '<b>Steps to reproduce:</b><br>{record.steps_to_reproduce}'
-        }
-    },
-    {
-        cls: 'mantis-ticket-list-ticket-description',
-        margin: '10 0 0 0',
-        bind: 
+            cls: 'mantis-ticket-list-ticket-description',
+            margin: '10 0 0 0',
+            html: record ? record.get('description') : ''
+        },
         {
-            hidden: '{!record.additional_information}',
-            html: '<b>Additional Information:</b><br>{record.additional_information}'
-        }
-    },
-    {
-        xtype: 'grid',
-        title: 'Notes',
-        margin: '10 0 0 0',
-        emptyText: 'No notes to display',
-        viewModel:
+            cls: 'mantis-ticket-list-ticket-description',
+            margin: '10 0 0 0',
+            html: '<b>Steps to reproduce:</b><br>' + record.get('steps_to_reproduce'),
+            hidden: record ? !record.get('steps_to_reproduce') : true
+        },
         {
-            stores:
+            cls: 'mantis-ticket-list-ticket-description',
+            margin: '10 0 0 0',
+            html: '<b>Additional Information:</b><br>' + record.get('additional_information'),
+            hidden: record ? !record.get('additional_information') : true
+        },
+        {
+            xtype: 'grid',
+            title: 'Notes',
+            margin: '10 0 0 0',
+            emptyText: 'No notes to display',
+            viewModel:
             {
-                publicnotes: 
+                stores:
                 {
-                    source: '{record.notes}',
-                    filters: [
-                        function(item) {
-                            return item.getView_state().get('label') === 'public';
-                        }
-                    ]
+                    publicnotes: 
+                    {
+                        source: record ? record.notes() : Ext.emptyStore,
+                        filters: [
+                            function(item) {
+                                return item.getView_state().get('label') === 'public';
+                            }
+                        ]
+                    }
                 }
-            }
-        },
-        bind: 
-        {
-            store: '{publicnotes}'
-        },
-        columns: [
-        { 
-            text: 'Reporter',       
-            dataIndex: 'reporter.name',
-            flex : 0.3,
-            filter: 'string',
-            renderer: function(value, metaData, record) 
-            {  
-                if (record._reporter) {
-                    return record.getReporter().get('name');
-                }
-                return value;
-            } 
-        },
-        { 
-            text: 'Date',           
-            dataIndex: 'created_at',       
-            flex: 0.3, 
-            xtype : 'datecolumn',
-            filter: 'date',
-            renderer: function(value, metaData, record) 
-            {  
-                return Utils.formatDateAndTime(value);
-            } 
-        },
-        { 
-            text: 'Note',       
-            dataIndex: 'text',
-            wrap: true,
-            flex : 1,
-            renderer: function(value, metaData, record)
+            },
+            bind: 
             {
-                return '<div style="white-space:normal !important;">' + value + '</div>';
-            }
-        }]
-    }]
+                store: '{publicnotes}'
+            },
+            columns: [
+            { 
+                text: 'Reporter',       
+                dataIndex: 'reporter.name',
+                flex : 0.3,
+                filter: 'string',
+                renderer: function(value, metaData, r) 
+                {  
+                    if (r._reporter) {
+                        return r.getReporter().get('name');
+                    }
+                    return value;
+                } 
+            },
+            { 
+                text: 'Date',           
+                dataIndex: 'created_at',       
+                flex: 0.3, 
+                xtype : 'datecolumn',
+                filter: 'date',
+                renderer: function(value) 
+                {  
+                    return Utils.formatDateAndTime(value);
+                } 
+            },
+            { 
+                text: 'Note',       
+                dataIndex: 'text',
+                wrap: true,
+                flex : 1,
+                renderer: function(value)
+                {
+                    return '<div style="white-space:normal !important;">' + value + '</div>';
+                }
+            }]
+        }];
+
+        this.callParent();
+    }
 
 });

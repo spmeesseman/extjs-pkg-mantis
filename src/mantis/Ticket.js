@@ -22,11 +22,36 @@ Ext.define('Ext.ux.mantis.Ticket',
         'border-radius': '10px'
     },
 
-    viewModel: 
+    config: {
+        record: null
+    },
+
+    //viewModel: 
+    //{
+    //    data: {
+    //        record: null
+    //    }
+    //},
+
+    initComponent: function()
     {
-        data: {
-            record: null
-        }
+        var me = this;
+
+        me.items = [
+        {
+            xtype: 'ticketheader',
+            record: me.record
+        },
+        {
+            cls: 'mantis-ticket-list-ticket-summary',
+            html: me.record.data.summary
+        },
+        {
+            cls: 'mantis-ticket-list-ticket-description',
+            html: me.record.data.shortDescription
+        }];
+
+        me.callParent();
     },
 
     listeners:
@@ -38,8 +63,8 @@ Ext.define('Ext.ux.mantis.Ticket',
                 var ticketsTabPanel = panel.up('tickets');
                 var tab = ticketsTabPanel.add(Ext.create('Ext.ux.mantis.TicketDetail',
                 {
-                    viewModel: panel.getViewModel(),
                     closable: true,
+                    record: panel.getRecord(),
                     bind:
                     {
                         title: 'Ticket #{record.id}'
@@ -60,25 +85,6 @@ Ext.define('Ext.ux.mantis.Ticket',
     defaults:
     {
         flex: 1
-    },
-
-    items: [
-    {
-        xtype: 'ticketheader'
-    },
-    {
-        cls: 'mantis-ticket-list-ticket-summary',
-        bind: 
-        {
-            html: '{record.summary}'
-        }
-    },
-    {
-        cls: 'mantis-ticket-list-ticket-description',
-        bind: 
-        {
-            html: '{record.shortDescription}'
-        }
-    }]
+    }
 
 });

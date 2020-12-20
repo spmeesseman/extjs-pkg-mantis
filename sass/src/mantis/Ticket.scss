@@ -14,7 +14,7 @@
 
 .mantis-ticket-list-ticket-id .x-panel-body 
 { 
-    color: #555555;
+    color: $base-color;
     font-weight: bold;
     font-size: 18px; 
     background: transparent !important;
@@ -30,7 +30,7 @@
 { 
     font-size: 14px; 
     font-weight: bold;
-    color: $base-color;
+    color: $font-color;
     background: transparent !important;
     padding: 0 0 5 0;
 }

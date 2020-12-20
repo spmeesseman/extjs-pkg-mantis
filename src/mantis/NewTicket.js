@@ -4,7 +4,7 @@
  */
 Ext.define('Ext.ux.mantis.NewTicket', 
 {
-    extend: 'Ext.panel.Panel',
+    extend: 'Ext.Panel',
     xtype: 'newticket',
     
     requires: [ 
@@ -26,7 +26,8 @@ Ext.define('Ext.ux.mantis.NewTicket',
 
     config:
     {
-        options: {}
+        options: {},
+        closeOnSave: false
     },
 
     viewModel:
@@ -267,6 +268,7 @@ Ext.define('Ext.ux.mantis.NewTicket',
     buttons: [
     {
         text: 'Clear',
+        iconCls: 'far fa-eraser',
         handler: function(btn)
         {
             var newticket = btn.up('newticket'),
@@ -281,67 +283,96 @@ Ext.define('Ext.ux.mantis.NewTicket',
     },
     {
         text: 'Submit',
+        iconCls: 'far fa-share',
         handler: function(btn)
         {
             var newticket = btn.up('newticket'),
-                rec = newticket.getViewModel().get('record');
+                rec = newticket.getViewModel().get('record'),
+                retried = false;
 
             var mask = new Ext.LoadMask(
             {
                 target: newticket,
-                msg: "Submitting ticket"
+                msg: 'Submitting ticket'
             }).show();
 
-            rec.save(
+            function _success(record)
             {
-                scope: this,
-                
-                failure: function(record, operation) 
+                mask.destroy();
+                Ext.toast('Ticket #' + record.getId() + ' submitted successfully');
+                var newRec = Ext.ux.mantis.model.Ticket.create(Ext.clone(newticket.newRecordOptions));
+                newRec.appOptions = newticket.options;
+                btn.up('newticket').getViewModel().set('record', newRec);
+                //btn.up('newticket').down('textfield').focus();
+                //
+                // Call application callback hook if defined
+                //
+                var fno = newticket.options.cb ? newticket.options.cb.newTicket : null;
+                if (fno)
                 {
-                    mask.hide();
-                    mask.destroy();
-
-                    Ext.Msg.alert("Request Failed", "Failed to submit new ticket");
-                },
-
-                success: function(record, operation) 
-                {
-                    mask.hide();
-                    mask.destroy();
-
-                    Ext.toast("Ticket #" + record.getId() + " submitted successfully");
-
-                    var newRec = Ext.ux.mantis.model.Ticket.create(Ext.clone(newticket.newRecordOptions));
-                    newRec.appOptions = newticket.options;
-                    btn.up('newticket').getViewModel().set('record', newRec);
-                    //btn.up('newticket').down('textfield').focus();
-
-                    //
-                    // Call application callback hook if defined
-                    //
-                    var fno = newticket.options.cb ? newticket.options.cb.newTicket : null;
-                    if (fno)
+                    if (Ext.isFunction(fno)) {
+                        fno(record, newticket);
+                    }
+                    else if (Ext.isObject(fno) && fno.fn)
                     {
-                        if (Ext.isFunction(fno)) {
-                            fno(record, newticket);
+                        if (!fno.scope) {
+                            fno.fn(record, newticket);
                         }
-                        else if (Ext.isObject(fno) && fno.fn)
-                        {
-                            if (!fno.scope) {
-                                fno.fn(record, newticket);
-                            }
-                            else {
-                                fno.fn.call(fno.scope, record, newticket);
-                            }
+                        else {
+                            fno.fn.call(fno.scope, record, newticket);
                         }
                     }
-
-                    //
-                    // Clear fields and place a new phantom model into the viewModel
-                    //
+                }
+                //
+                // Clear fields and place a new phantom model into the viewModel, or close
+                //
+                if (newticket.getCloseOnSave() !== true) {
                     newticket.clearFieldsCustom();
                 }
-            });
+                else {
+                    newticket.close();
+                }
+            }
+
+            function _save(r)
+            {
+                r.save(
+                {
+                    scope: this,
+                    success: function(record, operation) 
+                    {
+                        _success(record);
+                    },
+                    failure: function(record, operation) 
+                    {   //
+                        // If the version # is maj.min.rev.build, then try again with just maj.min.rev
+                        // Only retry once (set 'retried' flag)
+                        // 
+                        var statusText = operation.error && operation.error.statusText ? operation.error.statusText : '',
+                            version = record.data.version.name,
+                            tryAgain = !statusText.indexOf('Version') !== -1 && statusText.indexOf('does not exist in project') !== -1 &&
+                                       !retried && version && version.split('.').length > 3;
+                        if (tryAgain)
+                        {
+                            retried = true;
+                            record.set('version', {
+                                name: version.substring(0, version.lastIndexOf('.'))
+                            });
+                            Ext.create('Ext.util.DelayedTask', () =>
+                            {
+                                _save(record);
+                            }).delay(1);
+                        }
+                        else {
+                            mask.destroy();
+                            Ext.Msg.alert('Request Failed', 'Failed to submit new ticket' + 
+                                           (statusText ? '<br><br>' + statusText : ''));
+                        }
+                    }
+                });
+            }
+
+            _save(rec);
         }
     }]
 

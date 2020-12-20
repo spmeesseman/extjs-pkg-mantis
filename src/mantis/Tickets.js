@@ -79,6 +79,7 @@ Ext.define('Ext.ux.mantis.Tickets',
 
         me.items = [
         {
+            xtype: 'container',
             title: 'New Ticket',
             iconCls: 'far fa-ticket-alt',
             layout: 
@@ -99,6 +100,7 @@ Ext.define('Ext.ux.mantis.Tickets',
             }]
         },
         {
+            xtype: 'container',
             title: 'My Tickets',
             iconCls: 'far fa-bars',
             layout: 
@@ -118,6 +120,7 @@ Ext.define('Ext.ux.mantis.Tickets',
             }]
         },
         {
+            xtype: 'container',
             title: 'My Open Tickets',
             iconCls: 'far fa-bars',
             layout: 
@@ -137,6 +140,7 @@ Ext.define('Ext.ux.mantis.Tickets',
             }]
         },
         {
+            xtype: 'container',
             title: 'My Closed Tickets',
             iconCls: 'far fa-bars',
             layout: 
@@ -156,6 +160,7 @@ Ext.define('Ext.ux.mantis.Tickets',
             }]
         },
         {
+            xtype: 'container',
             title: 'Location Tickets',
             border: false,
             iconCls: 'far fa-bars',

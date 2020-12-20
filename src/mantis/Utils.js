@@ -22,8 +22,8 @@ Ext.define('Ext.ux.mantis.Utils',
         {
             if (!options.token || !options.location || !options.project_name)
             {
-                Ext.csi.Utilities.alertError("location || project_name || token " +
-                                                "must be set prior to calling this function");
+                Ext.csi.Utilities.alertError('location || project_name || token ' +
+                                                'must be set prior to calling this function');
                 reject([]);
             }
             else if (!MantisUtils.versionCache)
@@ -52,13 +52,13 @@ Ext.define('Ext.ux.mantis.Utils',
                         resolve(MantisUtils.versionCache);
                     }
                     else {
-                        Ext.Msg.alert("Could not retrieve changelog");
+                        Ext.Msg.alert('Could not retrieve changelog');
                         reject([]);
                     }
                 })
                 .catch(function()
                 {
-                    Ext.Msg.alert("Error retrieving changelog");
+                    Ext.Msg.alert('Error retrieving changelog');
                     reject([]);
                 });
             }
@@ -85,7 +85,7 @@ Ext.define('Ext.ux.mantis.Utils',
             }
         }
         else if (options.logFn) {
-            options.logFn("Utils.buildVersionCache() must be called prior to calling this function");
+            options.logFn('Utils.buildVersionCache() must be called prior to calling this function');
         }
         
         return version;
@@ -107,7 +107,7 @@ Ext.define('Ext.ux.mantis.Utils',
             }
         }
         else if (options.logFn) {
-            options.logFn("Utils.buildVersionCache() must be called prior to calling this function");
+            options.logFn('Utils.buildVersionCache() must be called prior to calling this function');
         }
         
         return version;
@@ -125,8 +125,8 @@ Ext.define('Ext.ux.mantis.Utils',
             if (!options.token || !options.location || !options.project_name)
             {
                 if (options.logFn) {
-                    options.logFn("options.location || options.project_name " +
-                                    "must be set prior to calling this function");
+                    options.logFn('options.location || options.project_name ' +
+                                    'must be set prior to calling this function');
                 }
                 reject([]);
             }
@@ -151,16 +151,16 @@ Ext.define('Ext.ux.mantis.Utils',
                     resolve('');
                 }
                 else if (options.logFn) {
-                    options.logFn("Could not retrieve changelog");
-                    Ext.Msg.alert("Error retrieving changelog");
+                    options.logFn('Could not retrieve changelog');
+                    Ext.Msg.alert('Error retrieving changelog');
                     reject(response);
                 }
             })
             .catch(function(response)
             {
                 if (options.logFn) {
-                    options.logFn("Error retrieving changelog");
-                    Ext.Msg.alert("Error retrieving changelog");
+                    options.logFn('Error retrieving changelog');
+                    Ext.Msg.alert('Error retrieving changelog');
                 }
                 reject(response);
             });

@@ -4,15 +4,66 @@
  */
 Ext.define('Ext.ux.mantis.TicketHeader', 
 {
-    extend: 'Ext.panel.Panel',
+    extend: 'Ext.Panel',
     xtype: 'ticketheader',
+
+    layout:
+    {
+        type: 'hbox',
+        align: 'stretch',
+        pack  : 'start'
+    },
+
+    bodyStyle: 
+    {
+        background: 'transparent'
+    },
+
+    config: {
+        record: null
+    },
+
+    initComponent: function()
+    {
+        var me = this;
+
+        me.items = [
+        {
+            flex: 1,
+            cls: 'mantis-ticket-list-ticket-id mantis-text-shadow-letterpress',
+            bind: {
+                html: '<span class="far fa-ticket-alt"></span> Ticket #' + (me.record ? me.record.data.id : '{record.id}')
+            }
+        },
+        {
+            xtype: 'container',
+            margin: '0 10 0 0',
+            items: [
+            {
+                xtype: 'container',
+                padding: '3 5 3 5',
+                bind: {
+                    html: me.record ? me.record.data.status.name : '{record.status.name}',
+                    style: 
+                    {
+                        'color': '#222222',
+                        'background': me.record ? me.record.data.status.color : '{record.status.color}',
+                        'text-align':'right',
+                        'border-radius': '5px'
+                    }
+                }
+            }]
+        }];
+
+        me.callParent();
+    },
 
     listeners:
     {
         render: function(panel) 
         {
             var color = '#b295af';
-            var record = panel.up().getViewModel().get('record');
+            var record = panel.up().getRecord();
             
             if (record.data.tags && record.data.tags.length > 0) 
             {
@@ -24,22 +75,24 @@ Ext.define('Ext.ux.mantis.TicketHeader',
 
                     switch (record.data.tags[tag].name)
                     {
-                        case "in progress":
-                            color = "#56d37a";
+                        case 'in progress':
+                            color = '#56d37a';
                             break;
                         default:
-                            color = "#4286f4";
+                            color = '#4286f4';
                             break;
                     }
                     
                     panel.insert(1, 
                     {
+                        xtype: 'container',
                         margin: '0 5 0 0',
                         items: [
                         {
+                            xtype: 'container',
                             html: record.data.tags[tag].name,
-                            bodyPadding: '3 5 3 5',
-                            bodyStyle: 
+                            padding: '3 5 3 5',
+                            style: 
                             {
                                 'color': '#ffffff',
                                 'background': color,
@@ -52,7 +105,7 @@ Ext.define('Ext.ux.mantis.TicketHeader',
             }
 
             var typeSet = false;
-
+/*
             if (record.data.custom_fields && record.data.custom_fields.length > 0) 
             {
                 var count = 0;
@@ -98,12 +151,14 @@ Ext.define('Ext.ux.mantis.TicketHeader',
 
                     panel.insert(1, 
                     {
+                        xtype: 'container',
                         margin: '0 5 0 0',
                         items: [
                         {
+                            xtype: 'container',
                             html: record.data.custom_fields[fld].value,
-                            bodyPadding: '3 5 3 5',
-                            bodyStyle: 
+                            padding: '3 5 3 5',
+                            style: 
                             {
                                 'color': '#ffffff',
                                 'background': color,
@@ -116,30 +171,32 @@ Ext.define('Ext.ux.mantis.TicketHeader',
                     count++;
                 }
             }
-
+*/
             if (!typeSet && record._severity)
             {
                 var tagText = record.getSeverity().get('label');
 
                 switch (tagText)
                 {
-                    case "feature":
-                        color = "#03b3c6";
+                    case 'feature':
+                        color = '#03b3c6';
                         break;
                     default:
-                        tagText = "bug";
+                        tagText = 'bug';
                         color = '#f7274d';
                         break;
                 }
                 
                 panel.insert(1, 
                 {
+                    xtype: 'container',
                     margin: '0 5 0 0',
                     items: [
                     {
+                        xtype: 'container',
                         html: tagText,
-                        bodyPadding: '3 5 3 5',
-                        bodyStyle: 
+                        padding: '3 5 3 5',
+                        style: 
                         {
                             'color': '#ffffff',
                             'background': color,
@@ -150,43 +207,6 @@ Ext.define('Ext.ux.mantis.TicketHeader',
                 });
             }
         }
-    },
+    }
 
-    layout:
-    {
-        type: 'hbox',
-        align: 'stretch',
-        pack  : 'start'
-    },
-    bodyStyle: 
-    {
-        background: 'transparent'
-    },
-    items: [
-    {
-        flex: 1,
-        cls: 'mantis-ticket-list-ticket-id mantis-text-shadow-letterpress',
-        bind: 
-        {
-            html: '<span class="fal fa-ticket-alt"></span> Ticket #{record.id}'
-        }
-    },
-    {
-        margin: '0 10 0 0',
-        items: [
-        {
-            bind: 
-            {
-                html: '{record.status.name}',
-                bodyStyle: 
-                {
-                    'color': '#222222',
-                    'background': '{record.status.color}',
-                    'text-align':'right',
-                    'border-radius': '5px'
-                }
-            },
-            bodyPadding: '3 5 3 5'
-        }]
-    }]
 });

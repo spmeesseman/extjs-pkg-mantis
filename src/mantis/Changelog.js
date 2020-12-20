@@ -4,7 +4,7 @@
  */
 Ext.define('Ext.ux.mantis.Changelog', 
 {
-    extend: 'Ext.panel.Panel',
+    extend: 'Ext.Panel',
     xtype: 'mantischangelog',
     
     require: [

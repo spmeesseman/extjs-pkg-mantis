@@ -59,8 +59,8 @@ Ext.define('Ext.ux.mantis.model.Ticket',
         if (!me.appOptions.noVersion) {
             version = Ext.manifest.version;
             if (me.appOptions.versionIsPatchX === true) {
-                version = version.substring(0, version.lastIndexOf("."));
-                version = version + ".x";
+                version = version.substring(0, version.lastIndexOf('.'));
+                version = version + '.x';
             }
         }
         return version;
@@ -83,7 +83,7 @@ Ext.define('Ext.ux.mantis.model.Ticket',
             me.set('created_at', new Date());
             me.set('project', { id: me.appOptions.project_id });
 
-            if (!me.appOptions.noVersion) {
+            if (!me.appOptions.noVersion && !me.get('version')) {
                 me.set('version', { name: me.getVersion() });
             }
 
@@ -99,12 +99,12 @@ Ext.define('Ext.ux.mantis.model.Ticket',
                     {
                         var v = cmp.getValue();
                         if (v === true) {
-                            v = "Yes";
+                            v = 'Yes';
                         }
                         else if (v === false) {
-                            v = "No";
+                            v = 'No';
                         }
-                        if (v || v == "0")
+                        if (v || v == '0')
                         {
                             var exists = false;
                             for (var f in fields) {

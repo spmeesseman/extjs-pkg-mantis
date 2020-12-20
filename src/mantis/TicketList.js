@@ -4,7 +4,7 @@
  */
 Ext.define('Ext.ux.mantis.TicketList', 
 {
-    extend: 'Ext.panel.Panel',
+    extend: 'Ext.Panel',
     xtype: 'ticketlist',
     
     requires: [ 
@@ -89,7 +89,7 @@ Ext.define('Ext.ux.mantis.TicketList',
     refreshPage: function(store)
     {
         var me = this;
-        var mask = MantisUtils.mask(me, "Retrieving tickets");
+        var mask = MantisUtils.mask(me, 'Retrieving tickets');
 
         store.getTotalCount = function() { return 0; };
         me.getTicketCount().then(function(count)
@@ -119,7 +119,7 @@ Ext.define('Ext.ux.mantis.TicketList',
                         try {
                             me.add(Ext.create('Ext.ux.mantis.Ticket',
                             {
-                                viewModel: { data: { record: records[t] } }
+                                record: records[t]
                             }));
                         }
                         catch(e) {
@@ -139,14 +139,14 @@ Ext.define('Ext.ux.mantis.TicketList',
 
         if (!me.getOptions().token) {
             if (me.logger) {
-                me.logger.error("Invalid token");
+                me.logger.error('Invalid token');
             }
             return null;
         }
 
         if (!me.getOptions().project_id) {
             if (me.logger) {
-                me.logger.error("Invalid project");
+                me.logger.error('Invalid project');
             }
             return null;
         }
@@ -171,16 +171,16 @@ Ext.define('Ext.ux.mantis.TicketList',
 
         if (!me.getOptions().token) {
             if (me.logger) {
-                me.logger.error("Invalid token");
+                me.logger.error('Invalid token');
             }
-            return Ext.Deferred.reject("Invalid token");
+            return Ext.Deferred.reject('Invalid token');
         }
 
         if (!me.getOptions().project_id) {
             if (me.logger) {
-                me.logger.error("Invalid project");
+                me.logger.error('Invalid project');
             }
-            return Ext.Deferred.reject("Invalid project");
+            return Ext.Deferred.reject('Invalid project');
         }
 
         Ext.Ajax.request(
@@ -205,7 +205,7 @@ Ext.define('Ext.ux.mantis.TicketList',
                 }
                 
                 if (!jso.count && jso.count !== 0) {
-                    deferred.reject("Could not retrieve ticket count.<br><br>" + jso.message);                       
+                    deferred.reject('Could not retrieve ticket count.<br><br>' + jso.message);                       
                     return;
                 }
 
