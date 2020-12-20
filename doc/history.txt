@@ -675,3 +675,56 @@ November 13th, 2020
     
     Increase max length of new ticket subject field to 96 characters.
 
+
+Version 1.7.0
+December 20th, 2020
+-------------------------------------------------------------------------------
+********************************************************************************
+***                                                                            *
+*** Verify that the following requirements have been satisfied:                *
+***                                                                            *
+*** Requirements:                                                              *
+*** -------------                                                              *
+***                                                                            *
+***    1.  Operating System            : Windows 7+                            * 
+***                                                                            *
+***    2.  CPU                         : 1.0+ GHz                              *
+***                                                                            *
+***    3.  RAM                         : 128 MB                                *
+***                                                                            *
+***    4.  ExtJS Core                  : 6.7+                                  *
+***                                                                            *
+********************************************************************************
+
+1.  Feature
+    
+    Add support for passing default new ticket record into 'tackets' xtype view.
+
+2.  Visual
+    
+    Improve overall look of ticket lists, reduce tag coloring.
+    
+3.  Performance
+    
+    Get rid of lag in hover styling when a ticket list tab is active.
+    
+4.  Performance
+    
+    Reduce memory footprint using xtype 'component' and 'container' as opposed
+    to 'panel' wherever possible.
+    
+5.  Feature
+    
+    If a ticket submission fails due to a non-existent version, and the Ext
+    manifest version contains a build # (i.e. maj.min.rev.build), then try again
+    without the build # (i.e. with maj.min.rev).
+    
+6.  Refactoring
+    
+    Add new config to Ext.us.mantis.NewTicket:
+    
+        closeOnSave
+    
+    Setting to a boolean value of 'true' will cause the panel to close itself
+    after a successful ticket submission.
+
