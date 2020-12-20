@@ -24,6 +24,7 @@ Ext.define('Ext.ux.mantis.Tickets',
         versionIsPatchX: false,
         location: "",
         cb: null,
+        newTicketRecord:null,
         defaultTicketValues:
         {
             priority: 30,
@@ -64,7 +65,17 @@ Ext.define('Ext.ux.mantis.Tickets',
 
     initComponent: function()
     {
-        var me = this;
+        var me = this,
+            record;
+
+        if (me.options.newTicketRecord)
+        {
+            record = me.options.newTicketRecord;
+        }
+        else {
+            record = Ext.ux.mantis.model.Ticket.create();
+        }
+        delete me.options.newTicketRecord;
 
         me.items = [
         {
@@ -79,7 +90,12 @@ Ext.define('Ext.ux.mantis.Tickets',
             items: [
             {
                 xtype: 'newticket',
-                options: me.options
+                options: me.options,
+                viewModel: {
+                    data: {
+                        record: record
+                    }
+                }
             }]
         },
         {
