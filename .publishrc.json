@@ -25,6 +25,7 @@
     ],
     "npmPackDist":       "Y",
     "npmRelease":        "Y",
+    "npmRegistry":       "https://npm.development.pjats.com",
     "promptForVersion":  "N",
     "repoType":          "svn",
     "repo":              "https://svn.development.pjats.com/pja/extjs-pkg-mantis",
