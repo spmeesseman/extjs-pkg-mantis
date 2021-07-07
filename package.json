@@ -32,10 +32,7 @@
     "publishConfig": {
         "access": "public"
     },
-    "scripts": {
-        "app-publish": "app-publisher -p ps",
-        "app-publish-dry": "app-publisher -p ps --dry-run"
-    },
+    "scripts": {},
     "sencha": {
         "name": "mantis",
         "namespace": "Ext.ux",
@@ -44,7 +41,7 @@
         "creator": "spmeesseman",
         "summary": "Package wrapper singleton for mantis",
         "detailedDescription": "Package wrapper singleton for mantis RPC",
-        "version": "1.0.0.0",
+        "version": "1.7.0.0",
         "compatversion": "1.0.0",
         "format": "1",
         "slicer": null,

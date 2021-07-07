@@ -9,8 +9,8 @@
     "emailHrefs": [
         "https://app1.development.pjats.com/svn/web/filedetails.php?repname=pja&path=%2Fextjs-pkg-mantis%2Ftrunk%2Fdoc%2Fhistory.txt&usemime=1|History File|History File - WebSVN</a>",
         "https://app1.development.pjats.com/svn/web/filedetails.php?repname=pja&path=%2Fextjs-pkg-mantis%2Ftrunk%2FREADME.md&usemime=1|ReadMe File|Readme File - WebSVN",
-        "https://app1.development.pjats.com/projects/set_project.php?project=extjs-pkg-mantis&make_default=no&ref=roadmap_page.php|Project Roadmap|Roadmap - Projects Board",
-        "https://app1.development.pjats.com/projects/set_project.php?project=extjs-pkg-mantis&make_default=no&ref=changelog_page.php|Project Changelog|Changelog - Projects Board"
+        "https://issues.pjats.com/set_project.php?project=extjs-pkg-mantis&make_default=no&ref=roadmap_page.php|Project Roadmap|Roadmap - Projects Board",
+        "https://issues.pjats.com/set_project.php?project=extjs-pkg-mantis&make_default=no&ref=changelog_page.php|Project Changelog|Changelog - Projects Board"
     ],
     "distRelease":       "N",
     "distReleasePathSrc":"install\\dist",
@@ -18,7 +18,7 @@
     "historyHdrFile":    "install\\history-hdr.txt",
     "mantisbtRelease":   "Y",
     "mantisbtApiToken":  "${MANTISBT_API_TOKEN}",
-    "mantisbtUrl":       "https://app1.development.pjats.com/projects",
+    "mantisbtUrl":       "https://issues.pjats.com",
     "mantisbtAssets": [
         "doc\\history.txt|History File",
         "install\\dist\\extjs-pkg-mantis.tgz|NPM Tarball"
@@ -27,7 +27,7 @@
     "npmRelease":        "Y",
     "promptForVersion":  "N",
     "repoType":          "svn",
-    "repo":              "https://svn.development.pjats.com/pja/extjs-pkg-mantis/trunk",
+    "repo":              "https://svn.development.pjats.com/pja/extjs-pkg-mantis",
     "skipChangelogEdits":"N",
     "skipCommit":        "N",
     "skipVersionEdits":  "Y",
